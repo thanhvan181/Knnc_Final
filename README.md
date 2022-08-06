@@ -10,7 +10,7 @@ Requirements:
 
 Clone the project:  
     ```
-        git clone ###############
+        git clone https://github.com/DieuNN/knnc.git
     ```  
 
 Install dependencies:   
