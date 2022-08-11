@@ -32,4 +32,3 @@ Deploy on local:
     ```
     dfx deploy
     ```
-just testing on new branch
