@@ -4,6 +4,8 @@ import TrieSet "mo:base/TrieSet";
 module {
     public type User =  {
         principal : Principal;
+        var displayName : ?Text;
+        var profileImage : ?Text;
         var role : UserRole;
         var tokens : TrieSet.Set<Nat>;
     };
@@ -20,6 +22,8 @@ module {
     public type UserExt = {
         principal : Principal;
         role : UserRole;
+        displayName : ?Text;
+        profileImage : ?Text;
         tokens : [Nat];
     };
 
