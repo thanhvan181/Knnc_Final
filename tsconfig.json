@@ -1,11 +1,22 @@
 {
-    "compilerOptions": {
-      "target": "es2018",        /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */
-      "lib": ["ES2018", "DOM"],  /* Specify library files to be included in the compilation. */
-      "allowJs": true,           /* Allow javascript files to be compiled. */
-      "jsx": "react",            /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
-      "allowSyntheticDefaultImports": true,
-      "moduleResolution": "Node"
-    },
-    "include": ["src/**/*"],
+  "compilerOptions": {
+    "target": "ESNext" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */,
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ] /* Specify library files to be included in the compilation. */,
+    "allowJs": true /* Allow javascript files to be compiled. */,
+    "jsx": "react-jsx" /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */,
+    "skipLibCheck": false,
+    "esModuleInterop": false,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true
+  },
+  "include": ["src/**/*"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
