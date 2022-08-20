@@ -43,10 +43,14 @@
     "last 2 edge version"
   ],
   "dependencies": {
+    "@types/jest": "^28.1.6",
+    "@types/node": "^18.7.3",
     "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
     "css-loader": "^6.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.3.0",
     "style-loader": "^3.3.1"
   }
 }
