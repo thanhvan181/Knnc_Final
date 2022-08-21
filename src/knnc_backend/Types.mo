@@ -41,7 +41,7 @@ module {
 
     public type Token = {
         index : Nat;
-        var owner : User;
+        var owner : Principal;
         tokenMetadata : TokenMetadata;
         var operator : TokenOperator;
         var timestamp : Time.Time;
@@ -73,7 +73,29 @@ module {
         timestamp : Time.Time;
     };
 
+    public type Fund = {
+        id : Nat;
+        founder : Principal;
+        limit  : Nat;
+        var raisedFund : Float;
+        name : Text;
+        var tokens : TrieSet.Set<Nat>;
+        description : Text;
+        createAt : Time.Time;
+        endAt : Time.Time;
+    };
 
-
-
+    public type FundExt = {
+        id : Nat;
+        founder : Principal;
+        limit  : Nat;
+        raisedFund : Float;
+        name : Text;
+        tokens : [Nat];
+        description : Text;
+        createAt : Time.Time;
+        endAt : Time.Time;
+    };
+    
+    
 }
