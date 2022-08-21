@@ -4,7 +4,17 @@ import ClientLayout from "./layouts/client/ClientLayout";
 import AdminLayout from "./layouts/admin/AdminLayout";
 import Home from "./pages/client/Home/Home";
 import TestAdmin from "./pages/admin/TestAdmin";
+import { ConfigProvider } from "antd";
+import './normalize.css'
+import './variable.css';
 
+ConfigProvider.config({
+  prefixCls: 'ant', // 4.13.0+
+  iconPrefixCls: 'anticon', // 4.17.0+
+  theme: {
+    primaryColor: "#bfbfbf",
+  }
+});
 function App() {
   return (
     <div className="App">
