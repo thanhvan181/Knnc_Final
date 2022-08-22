@@ -182,6 +182,11 @@ actor Main {
     return#ok("User role changed");
   };
 
+<<<<<<< HEAD
+<<<<<<< Updated upstream
+=======
+=======
+>>>>>>> b6c3acfb1163248db8a83d637ddd299fbc56333f
   public query func getAllTokens() : async [Types.TokenInfoExt] {
     var result : [Types.TokenInfoExt] = [];
     for(element in _tokens.vals()) {
@@ -235,6 +240,10 @@ actor Main {
   };
 
   public func createFund(who : Principal, fundInfo : Types.FundExt) : async Result.Result<Text, Text> {
+<<<<<<< HEAD
+    assert (_isUserExist(who));
+=======
+>>>>>>> b6c3acfb1163248db8a83d637ddd299fbc56333f
     if(_isAdmin(who)) {
       _funds.put(_totalFunds, _newFund(fundInfo));
       return #ok("Ok");
@@ -244,9 +253,12 @@ actor Main {
         _funds.put(_totalFunds, _newFund(fundInfo));
         return #ok("OK");
       };
+<<<<<<< HEAD
+=======
       case null {
         return #err("Just organization or admin can create fund")
       };
+>>>>>>> b6c3acfb1163248db8a83d637ddd299fbc56333f
     };
   };
 
@@ -319,6 +331,10 @@ public query func getFundInfo(fundId : Nat) : async ?Types.FundExt {
 };
 
 
+<<<<<<< HEAD
+>>>>>>> Stashed changes
+=======
+>>>>>>> b6c3acfb1163248db8a83d637ddd299fbc56333f
 
   // !!
   system func preupgrade() {
