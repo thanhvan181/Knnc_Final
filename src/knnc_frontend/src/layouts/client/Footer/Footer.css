@@ -1,0 +1,13 @@
+footer {
+    background-color: var(--primary);
+    color: var(--text-color);
+    width: 100%;
+    padding: 20px 0px;
+    text-align: center;
+}
+.license {
+    text-align: center;
+    font-size:22px;
+    font-weight: bold;
+    margin-left: -230px;
+}
