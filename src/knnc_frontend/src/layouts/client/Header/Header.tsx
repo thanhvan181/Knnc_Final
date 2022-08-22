@@ -4,23 +4,23 @@ import 'antd/dist/antd.css';
 import React, { useState } from 'react';
 import "./Header.css"
 import { Link } from "react-router-dom";
-import {knnc_backend} from "../../../../../declarations/knnc_backend"
+import { knnc_backend } from "../../../../../declarations/knnc_backend"
 import { Principal } from '@dfinity/principal';
 
 type Props = {};
 declare global {
   interface Window {
-    ic : {
-      plug : {
-        requestConnect() : Promise<any>,
-        isConnected() : Promise<boolean>,
-        sessionManager : {
-          sessionData : {
-            principalId : Principal,
-            accountId : string
+    ic: {
+      plug: {
+        requestConnect(): Promise<any>,
+        isConnected(): Promise<boolean>,
+        sessionManager: {
+          sessionData: {
+            principalId: Principal,
+            accountId: string
           }
         },
-        requestBalance() : Promise<[any]> 
+        requestBalance(): Promise<[any]>
       }
     }
   }
@@ -29,27 +29,46 @@ declare global {
 const Header = (props: Props) => {
   const [principal, setPrincipal] = useState<Principal>()
   const [connected, setconnected] = useState(false)
+  const [balance, setBalance] = useState(0)
   const loginWithPlug = async () => {
     let result = await window.ic.plug.requestConnect()
     let isConnected = await window.ic.plug.isConnected()
-    if(isConnected) {
+    if (isConnected) {
       setconnected(true)
       setPrincipal(window.ic.plug.sessionManager.sessionData.principalId)
       let balance = await window.ic.plug.requestBalance()
       // lay so ICP trong vi
-      // console.log(balance[0].amount);
+      console.log(balance[0].amount);
 
-      
+
       let createUser = await knnc_backend.createUser(await Principal.from(window.ic.plug.sessionManager.sessionData.principalId))
       console.log(createUser);
       let userInfo = await knnc_backend.getUserInfoByPrincipal(Principal.from(await window.ic.plug.sessionManager.sessionData.principalId))
       console.log(userInfo);
-      
+
       // switch case o day
-      console.log(Object.getOwnPropertyNames(userInfo[0].role)[0].toString() == 'organization');
-
-
-
+      switch (Object.getOwnPropertyNames(userInfo[0].role)[0].toString()) {
+        case 'admin': {
+          // admin thi lam j
+          console.log("toi la admin");
+          break;
+        };
+        case 'normal': {
+          // nguoi binh thuong
+          console.log("toi la nguoi bth");
+          break;
+        };
+        case 'organization': {
+          // to chuc
+          console.log("toi la to chuc");
+          break;
+        };
+        case 'verifiedUser': {
+          // nguoi da duoc xac nhan
+          console.log("toi la verifiedUser");
+          break;
+        }
+      }
     }
   }
 
@@ -78,6 +97,12 @@ const Header = (props: Props) => {
                 {connected ? "Profile" : "Authenticate"} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
               </Space>
             </Button>
+            {/*  khi connect xong thi hien so du vi, nhung ma ko biet css nhu nao :( */}
+            {connected ? <Button className="login" onClick={loginWithPlug}>
+              <Space size={size} className='nameLogin'>
+                {balance} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
+              </Space>
+            </Button>: ""}
           </div>
         </Col>
       </Row>

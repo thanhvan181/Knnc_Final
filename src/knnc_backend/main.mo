@@ -20,7 +20,7 @@ actor Main {
   private stable var _userEntries : [(Principal, Types.User)] = [];
   private stable var _tokensEntries : [(Nat, Types.Token)] = [];
   private stable var _adminPrincipals : [Principal] = [
-    Principal.fromText("2azua-e7lot-lbxmr-uf3zr-hc2qh-bocw7-euxcb-mzfzw-tpvog-oisgo-cqe")
+    Principal.fromText("2azua-e7lot-lbxmr-uf3zr-hc2qh-bocw7-euxcb-mzfzw-tpvog-oisgo-cqe"),
   ];
 
   // Check if user exist
