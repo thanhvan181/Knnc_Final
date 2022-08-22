@@ -5,8 +5,6 @@ import AdminLayout from "./layouts/admin/AdminLayout";
 import Home from "./pages/client/Home/Home";
 import TestAdmin from "./pages/admin/TestAdmin";
 import { ConfigProvider } from "antd";
-import './normalize.css'
-import './variable.css';
 
 ConfigProvider.config({
   prefixCls: 'ant', // 4.13.0+
@@ -25,7 +23,7 @@ function App() {
         </Route>
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<TestAdmin />} />
-          <Route path="test" element={<TestAdmin />}/>
+          <Route path="test" element={<TestAdmin />} />
         </Route>
       </Routes>
     </div>
