@@ -53,8 +53,8 @@ actor Main {
   private func _newUser(principal : Principal) : Types.User {
     let newUser : Types.User = {
       principal : Principal = principal;
-      var displayName : ?Text = null;
-      var profileImage : ?Text = null;
+      var name : ?Text = null;
+      var image : ?Text = null;
       var role : Types.UserRole = #normal;
       var tokens = TrieSet.empty();
     };
@@ -84,8 +84,8 @@ actor Main {
         
         let temp : Types.User = {
           principal = principal;
-          var displayName = displayName;
-          var profileImage = profileImage;
+          var name = displayName;
+          var image = profileImage;
           var role = user.role;
           var tokens = user.tokens;
         };
@@ -114,6 +114,9 @@ actor Main {
           case (#verifiedUser) {
             return (?#verifiedUser);
           };
+          case (#admin) {
+            return (?#admin)
+          };
         };
       };
     }; 
@@ -135,6 +138,9 @@ actor Main {
           case (#verifiedUser) {
             return (?#verifiedUser);
           };
+          case (#admin) {
+            return (?#admin)
+          };
         };
       };
     }; 
@@ -148,8 +154,8 @@ actor Main {
       case (?user) {
         let result : Types.UserExt = {
           principal = user.principal;
-          displayName = user.displayName;
-          profileImage = user.profileImage;
+          name = user.name;
+          image = user.image;
           role = user.role;
           tokens = TrieSet.toArray(user.tokens);
         };
@@ -182,11 +188,6 @@ actor Main {
     return#ok("User role changed");
   };
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> b6c3acfb1163248db8a83d637ddd299fbc56333f
   public query func getAllTokens() : async [Types.TokenInfoExt] {
     var result : [Types.TokenInfoExt] = [];
     for(element in _tokens.vals()) {
@@ -208,9 +209,9 @@ actor Main {
     var result : [Types.UserExt] = [];
     for(element in _users.vals()) {
       let temp : Types.UserExt = {
-        displayName = element.displayName;
+        name = element.name;
         principal = element.principal;
-        profileImage = element.profileImage;
+        image = element.image;
         role = element.role;
         tokens = TrieSet.toArray(element.tokens);
       };
@@ -240,10 +241,7 @@ actor Main {
   };
 
   public func createFund(who : Principal, fundInfo : Types.FundExt) : async Result.Result<Text, Text> {
-<<<<<<< HEAD
     assert (_isUserExist(who));
-=======
->>>>>>> b6c3acfb1163248db8a83d637ddd299fbc56333f
     if(_isAdmin(who)) {
       _funds.put(_totalFunds, _newFund(fundInfo));
       return #ok("Ok");
@@ -253,12 +251,9 @@ actor Main {
         _funds.put(_totalFunds, _newFund(fundInfo));
         return #ok("OK");
       };
-<<<<<<< HEAD
-=======
       case null {
         return #err("Just organization or admin can create fund")
       };
->>>>>>> b6c3acfb1163248db8a83d637ddd299fbc56333f
     };
   };
 
@@ -331,10 +326,6 @@ public query func getFundInfo(fundId : Nat) : async ?Types.FundExt {
 };
 
 
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> b6c3acfb1163248db8a83d637ddd299fbc56333f
 
   // !!
   system func preupgrade() {

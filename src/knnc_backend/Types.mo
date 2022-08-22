@@ -4,8 +4,8 @@ import TrieSet "mo:base/TrieSet";
 module {
     public type User =  {
         principal : Principal;
-        var displayName : ?Text;
-        var profileImage : ?Text;
+        var name : ?Text;
+        var image : ?Text;
         var role : UserRole;
         var tokens : TrieSet.Set<Nat>;
     };
@@ -22,8 +22,8 @@ module {
     public type UserExt = {
         principal : Principal;
         role : UserRole;
-        displayName : ?Text;
-        profileImage : ?Text;
+        name : ?Text;
+        image : ?Text;
         tokens : [Nat];
     };
 
@@ -31,6 +31,7 @@ module {
         #normal;
         #verifiedUser;
         #organization;
+        #admin;
     };  
 
     public type TokenMetadata = {
