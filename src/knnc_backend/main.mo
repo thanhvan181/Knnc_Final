@@ -5,6 +5,7 @@ import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
+import Time "mo:base/Time";
 import TrieSet "mo:base/TrieSet";
 import Types "Types";
 
@@ -12,8 +13,10 @@ import Types "Types";
 actor Main {
   private stable var _userIndex = 0;
   private stable var _totalTokens = 0;
+  private stable var _totalFunds = 1;
   private var _users : HashMap.HashMap<Principal, Types.User> = HashMap.HashMap(1, Principal.equal, Principal.hash);
   private var _tokens : HashMap.HashMap<Nat, Types.Token> = HashMap.HashMap(1, Nat.equal, Hash.hash);
+  private var _funds : HashMap.HashMap<Nat, Types.Fund> = HashMap.HashMap(1, Nat.equal, Hash.hash);
   private stable var _userEntries : [(Principal, Types.User)] = [];
   private stable var _tokensEntries : [(Nat, Types.Token)] = [];
   private stable var _adminPrincipals : [Principal] = [
@@ -95,7 +98,28 @@ actor Main {
     };
   };
 
-  private func getUserRole(principal : Principal) :  ?Types.UserRole   {
+  private func _getUserRole(principal : Principal) :  ?Types.UserRole   {
+    switch(_users.get(principal)) {
+      case null {
+        return null
+      };
+      case (?user) {
+        switch(user.role) {
+          case (#normal) {
+            return (?#normal);
+          };
+          case (#organization) {
+            return (?#organization);
+          };
+          case (#verifiedUser) {
+            return (?#verifiedUser);
+          };
+        };
+      };
+    }; 
+  };
+
+  public query func getUserRole(principal : Principal) : async  ?Types.UserRole   {
     switch(_users.get(principal)) {
       case null {
         return null
@@ -135,23 +159,6 @@ actor Main {
     };
   };
 
-  // Return array of users
-  public query func getUsers() : async [Types.UserExt] {
-    var result : [Types.UserExt] = [];
-
-    for(element in _users.vals()) {
-      let temp : Types.UserExt = {
-        principal = element.principal;
-        role = element.role;
-        displayName = element.displayName;
-        profileImage = element.profileImage;
-        tokens = TrieSet.toArray(element.tokens);
-      };
-      result := Array.append(result, [temp]);
-    };
-
-    return result;
-  };
 
   // Set user role, only changed by admin
   public func setUserRole(callerPrincipal : Principal,userPrincipal : Principal, userRole : Types.UserRole) : async Result.Result<Text, Text> {
@@ -175,8 +182,11 @@ actor Main {
     return#ok("User role changed");
   };
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> b6c3acfb1163248db8a83d637ddd299fbc56333f
   public query func getAllTokens() : async [Types.TokenInfoExt] {
     var result : [Types.TokenInfoExt] = [];
     for(element in _tokens.vals()) {
@@ -230,7 +240,10 @@ actor Main {
   };
 
   public func createFund(who : Principal, fundInfo : Types.FundExt) : async Result.Result<Text, Text> {
+<<<<<<< HEAD
     assert (_isUserExist(who));
+=======
+>>>>>>> b6c3acfb1163248db8a83d637ddd299fbc56333f
     if(_isAdmin(who)) {
       _funds.put(_totalFunds, _newFund(fundInfo));
       return #ok("Ok");
@@ -240,6 +253,12 @@ actor Main {
         _funds.put(_totalFunds, _newFund(fundInfo));
         return #ok("OK");
       };
+<<<<<<< HEAD
+=======
+      case null {
+        return #err("Just organization or admin can create fund")
+      };
+>>>>>>> b6c3acfb1163248db8a83d637ddd299fbc56333f
     };
   };
 
@@ -312,7 +331,10 @@ public query func getFundInfo(fundId : Nat) : async ?Types.FundExt {
 };
 
 
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> b6c3acfb1163248db8a83d637ddd299fbc56333f
 
   // !!
   system func preupgrade() {
