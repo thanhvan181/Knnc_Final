@@ -48,7 +48,7 @@ li a {
 
 li a:hover {
     border: 1px var(--yellow) solid;
-    border-radius: 5px;
+    border-radius: 10px;
     text-decoration: underline;
     color: var(--text-color);
     background-color: var(--yellow);
@@ -65,5 +65,8 @@ li a:hover {
     color: var(--text-color);
     background-color: var(--primary);
     font-weight: bold;
-    margin-left: 100px;
+    margin-left: 140px;
+}
+.iconLogin{
+    margin-top: -12px;
 }

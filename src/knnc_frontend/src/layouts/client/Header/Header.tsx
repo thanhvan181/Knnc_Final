@@ -21,7 +21,7 @@ const Header = (props: Props) => {
           <nav className="menu">
             <ul>
               <li><Link to={'/'}>Trang chủ</Link></li>
-              <li><Link to={'/'}>Hòm Quỹ</Link></li>
+              <li><Link to={'/launch'}>Hòm Quỹ</Link></li>
               <li><Link to={'/'}>Chợ tình thương</Link></li>
             </ul> 
           </nav>

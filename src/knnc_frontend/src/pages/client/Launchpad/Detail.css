@@ -1,0 +1,113 @@
+.detail {
+    background-color: snow;
+    width: 1315px;
+    margin: 12px auto;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.img-detail {
+    margin-left: -24px;
+}
+
+.progress {
+    margin-left: -20px;
+    margin-top: -10px;
+    width: 680px;
+}
+
+.blockICP {
+    margin-left: 4px;
+    margin-top: -10px;
+}
+
+.ICP {
+    display: flex;
+    margin-top: 24px;
+    margin-left: -16px;
+}
+
+.ICP-img {
+    margin-top: 8px;
+}
+
+.ICP-number {
+    margin-left: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1890FF;
+}
+
+.gh {
+    font-size: 16px;
+    color: #727272;
+    margin: 20px 0px 0px -16px;
+}
+
+.date {
+    margin-top: 20px;
+    margin-left: 5px;
+}
+
+.dhms {
+    margin-left: -18px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1890FF;
+}
+
+.ICP2 {
+    display: flex;
+    margin-top: 24px;
+    margin-left: -12px;
+}
+
+.ICP-img2 {
+    margin-top: 8px;
+}
+
+.ICP-number2 {
+    margin-left: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1890FF;
+}
+
+.gh2 {
+    font-size: 16px;
+    color: #727272;
+    margin: 20px 0px 0px -12px;
+}
+
+.btn-sponsor {
+    background: #1890FF;
+    border: 1px solid #1890FF;
+    color: var(--text-color);
+    width: 450px;
+    border-radius: 20px;
+    margin-top: 20px;
+    margin-left: -12px;
+}
+
+.btn-share {
+    margin-top: 12px;
+    margin-left: -12px;
+    height: 50px;
+    width: 130px;
+    border-radius: 5px;
+}
+
+.block-story {
+    margin-left: 12px;
+    margin-top: 10px;
+}
+
+h2 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+.story{
+    font-size: 16px;
+    color: #727272;
+}

@@ -7,6 +7,9 @@ import TestAdmin from "./pages/admin/TestAdmin";
 import { ConfigProvider } from "antd";
 import './normalize.css'
 import './variable.css';
+import Launch from "./pages/client/Launchpad/Launch";
+import Detail from "./pages/client/Launchpad/Detail";
+
 
 ConfigProvider.config({
   prefixCls: 'ant', // 4.13.0+
@@ -20,14 +23,32 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<ClientLayout />}>
+          <Route index element={<Detail />} />
+          <Route path="/home" element={<Detail />} />
+          <Route path="launch">
+            <Route index element={<Launch />} />
+            <Route path="detail" element={<Detail />} />
+          </Route>
+        </Route>
+        <Route path="admin" element={<AdminLayout />}>
+          <Route index element={<TestAdmin />} />
+          <Route path="test" element={<TestAdmin />} />
+        </Route>
+      </Routes>
+      {/* <Routes>
+        <Route path="/" element={<ClientLayout />}>
           <Route index element={<Home />} />
           <Route path="/home" element={<Home />} />
+          <Route path="launch">
+            <Route index element={<Launch />} />
+            <Route path="detail"  element={<Detail />}/>
+          </Route>
         </Route>
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<TestAdmin />} />
           <Route path="test" element={<TestAdmin />}/>
         </Route>
-      </Routes>
+      </Routes> */}
     </div>
   );
 }
