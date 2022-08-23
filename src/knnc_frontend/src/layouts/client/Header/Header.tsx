@@ -10,6 +10,24 @@ import { Principal } from '@dfinity/principal';
 
 type Props = {};
 
+declare global {
+  interface Window {
+    ic: {
+      plug: {
+        requestConnect(): Promise<any>,
+        isConnected(): Promise<boolean>,
+        sessionManager: {
+          sessionData: {
+            principalId: Principal,
+            accountId: string
+          }
+        },
+        requestBalance(): Promise<[any]>
+      }
+    }
+  }
+}
+
 const Header = (props: Props) => {
   const [principal, setPrincipal] = useState<Principal>()
   const [connected, setconnected] = useState(false)
@@ -70,22 +88,23 @@ const Header = (props: Props) => {
               <li><Link to={'/'}>Trang chủ</Link></li>
               <li><Link to={'/launch'}>Hòm Quỹ</Link></li>
               <li><Link to={'/'}>Chợ tình thương</Link></li>
-            </ul> 
+            </ul>
           </nav>
         </Col>
         <Col span={8} className="grid-3">
           <div className="btn-login">
+          {connected ?
+              <Button className="balance" onClick={loginWithPlug}>
+                <Space size={size} className='nameLogin'>
+                  {balance} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
+                </Space>
+              </Button> : ""}
+
             <Button className="login" onClick={loginWithPlug}>
               <Space size={size} className='nameLogin'>
                 {connected ? "Profile" : "Authenticate"} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
               </Space>
             </Button>
-            {/*  khi connect xong thi hien so du vi, nhung ma ko biet css nhu nao :( */}
-            {connected ? <Button className="login" onClick={loginWithPlug}>
-              <Space size={size} className='nameLogin'>
-                {balance} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
-              </Space>
-            </Button>: ""}
           </div>
         </Col>
       </Row>

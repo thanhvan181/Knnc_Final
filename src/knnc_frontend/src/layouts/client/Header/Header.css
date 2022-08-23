@@ -66,6 +66,14 @@ li a:hover {
     background-color: var(--primary);
     font-weight: bold;
 }
+.balance{
+    border: 1px solid snow;
+    border-radius: 5px;
+    color: var(--text-color);
+    background-color: var(--primary);
+    font-weight: bold;
+    margin-right: 20px;
+}
 .iconLogin{
     margin-top: -12px;
     margin-left: 100px;

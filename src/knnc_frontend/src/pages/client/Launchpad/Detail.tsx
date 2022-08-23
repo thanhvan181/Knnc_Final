@@ -10,7 +10,7 @@ const detailLaunch = (props: Props) => {
             <div >
                 <Row className="detail">
                     <Col span={12} className="img-detail"><img src="https://res.cloudinary.com/dielvkumg/image/upload/v1661163385/image_10_jnsijh.png" alt="" /></Col>
-                    <Col span={12}>
+                    <Col span={12} className="inf-get">
                         <Progress percent={20} showInfo={false} className="progress" />
                         <div className='blockICP'>
                             <div className='ICP'>
