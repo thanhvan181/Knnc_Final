@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Routes, Route, NavLink, Navigate, Link } from "react-router-dom";
 import ClientLayout from "./layouts/client/ClientLayout";
@@ -23,20 +24,6 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<ClientLayout />}>
-          <Route index element={<Detail />} />
-          <Route path="/home" element={<Detail />} />
-          <Route path="launch">
-            <Route index element={<Launch />} />
-            <Route path="detail" element={<Detail />} />
-          </Route>
-        </Route>
-        <Route path="admin" element={<AdminLayout />}>
-          <Route index element={<TestAdmin />} />
-          <Route path="test" element={<TestAdmin />} />
-        </Route>
-      </Routes>
-      {/* <Routes>
-        <Route path="/" element={<ClientLayout />}>
           <Route index element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="launch">
@@ -48,9 +35,10 @@ function App() {
           <Route index element={<TestAdmin />} />
           <Route path="test" element={<TestAdmin />}/>
         </Route>
-      </Routes> */}
+      </Routes> 
     </div>
   );
 }
 
 export default App;
+

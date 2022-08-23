@@ -20,7 +20,7 @@ actor Main {
   private stable var _userEntries : [(Principal, Types.User)] = [];
   private stable var _tokensEntries : [(Nat, Types.Token)] = [];
   private stable var _adminPrincipals : [Principal] = [
-    Principal.fromText("2azua-e7lot-lbxmr-uf3zr-hc2qh-bocw7-euxcb-mzfzw-tpvog-oisgo-cqe")
+    Principal.fromText("2azua-e7lot-lbxmr-uf3zr-hc2qh-bocw7-euxcb-mzfzw-tpvog-oisgo-cqe"),
   ];
 
   // Check if user exist
@@ -53,8 +53,8 @@ actor Main {
   private func _newUser(principal : Principal) : Types.User {
     let newUser : Types.User = {
       principal : Principal = principal;
-      var displayName : ?Text = null;
-      var profileImage : ?Text = null;
+      var name : ?Text = null;
+      var image : ?Text = null;
       var role : Types.UserRole = #normal;
       var tokens = TrieSet.empty();
     };
@@ -84,8 +84,8 @@ actor Main {
         
         let temp : Types.User = {
           principal = principal;
-          var displayName = displayName;
-          var profileImage = profileImage;
+          var name = displayName;
+          var image = profileImage;
           var role = user.role;
           var tokens = user.tokens;
         };
@@ -114,6 +114,9 @@ actor Main {
           case (#verifiedUser) {
             return (?#verifiedUser);
           };
+          case (#admin) {
+            return (?#admin)
+          };
         };
       };
     }; 
@@ -135,6 +138,9 @@ actor Main {
           case (#verifiedUser) {
             return (?#verifiedUser);
           };
+          case (#admin) {
+            return (?#admin)
+          };
         };
       };
     }; 
@@ -148,8 +154,8 @@ actor Main {
       case (?user) {
         let result : Types.UserExt = {
           principal = user.principal;
-          displayName = user.displayName;
-          profileImage = user.profileImage;
+          name = user.name;
+          image = user.image;
           role = user.role;
           tokens = TrieSet.toArray(user.tokens);
         };
@@ -203,9 +209,9 @@ actor Main {
     var result : [Types.UserExt] = [];
     for(element in _users.vals()) {
       let temp : Types.UserExt = {
-        displayName = element.displayName;
+        name = element.name;
         principal = element.principal;
-        profileImage = element.profileImage;
+        image = element.image;
         role = element.role;
         tokens = TrieSet.toArray(element.tokens);
       };
@@ -235,6 +241,7 @@ actor Main {
   };
 
   public func createFund(who : Principal, fundInfo : Types.FundExt) : async Result.Result<Text, Text> {
+    assert (_isUserExist(who));
     if(_isAdmin(who)) {
       _funds.put(_totalFunds, _newFund(fundInfo));
       return #ok("Ok");

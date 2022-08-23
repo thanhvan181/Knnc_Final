@@ -65,8 +65,14 @@ li a:hover {
     color: var(--text-color);
     background-color: var(--primary);
     font-weight: bold;
-    margin-left: 140px;
 }
 .iconLogin{
     margin-top: -12px;
+    margin-left: 100px;
+}
+.nameLogin{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    
 }
