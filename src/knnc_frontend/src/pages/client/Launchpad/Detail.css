@@ -7,9 +7,11 @@
 }
 
 .img-detail {
+    margin-left: 12px;
+}
+.inf-get{
     margin-left: -24px;
 }
-
 .progress {
     margin-left: -20px;
     margin-top: -10px;
