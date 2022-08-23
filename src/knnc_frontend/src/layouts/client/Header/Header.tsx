@@ -1,3 +1,4 @@
+
 import { Col, Row, Button, Space, PageHeader } from 'antd';
 import { blue } from '@ant-design/colors';
 import 'antd/dist/antd.css';
@@ -8,23 +9,6 @@ import { knnc_backend } from "../../../../../declarations/knnc_backend"
 import { Principal } from '@dfinity/principal';
 
 type Props = {};
-declare global {
-  interface Window {
-    ic: {
-      plug: {
-        requestConnect(): Promise<any>,
-        isConnected(): Promise<boolean>,
-        sessionManager: {
-          sessionData: {
-            principalId: Principal,
-            accountId: string
-          }
-        },
-        requestBalance(): Promise<[any]>
-      }
-    }
-  }
-}
 
 const Header = (props: Props) => {
   const [principal, setPrincipal] = useState<Principal>()
@@ -71,7 +55,6 @@ const Header = (props: Props) => {
       }
     }
   }
-
   const [size, setSize] = useState(12);
   return <>
     <header className='header' >
@@ -85,9 +68,9 @@ const Header = (props: Props) => {
           <nav className="menu">
             <ul>
               <li><Link to={'/'}>Trang chủ</Link></li>
-              <li><Link to={'/'}>Hòm Quỹ</Link></li>
+              <li><Link to={'/launch'}>Hòm Quỹ</Link></li>
               <li><Link to={'/'}>Chợ tình thương</Link></li>
-            </ul>
+            </ul> 
           </nav>
         </Col>
         <Col span={8} className="grid-3">
@@ -111,3 +94,4 @@ const Header = (props: Props) => {
 };
 
 export default Header;
+
