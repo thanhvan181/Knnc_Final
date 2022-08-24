@@ -81,9 +81,11 @@ module {
         var raisedFund : Float;
         name : Text;
         var tokens : TrieSet.Set<Nat>;
-        description : Text;
+        story : Text;
+        activities : Text;
         createAt : Time.Time;
         endAt : Time.Time;
+        image : Text;
     };
 
     public type FundExt = {
@@ -93,9 +95,11 @@ module {
         raisedFund : Float;
         name : Text;
         tokens : [Nat];
-        description : Text;
+        story : Text;
+        activities : Text;
         createAt : Time.Time;
         endAt : Time.Time;
+        image : Text;
     };
     
     

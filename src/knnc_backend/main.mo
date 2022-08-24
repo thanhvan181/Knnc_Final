@@ -225,7 +225,8 @@ actor Main {
     
     let result : Types.Fund = {
       createAt = fundExt.createAt;
-      description = fundExt.description;
+      story = fundExt.story;
+      activities = fundExt.activities;
       endAt = fundExt.endAt;
       founder = fundExt.founder;
       id = _totalFunds;
@@ -233,6 +234,7 @@ actor Main {
       name = fundExt.name;
       var raisedFund = 0;
       var tokens = TrieSet.empty();
+      image = fundExt.image;
     };
 
     _totalFunds := _totalFunds + 1;
@@ -262,7 +264,8 @@ actor Main {
     for(element in _funds.vals()) {
       let temp : Types.FundExt = {
       createAt = element.createAt;
-      description = element.description;
+      story = element.story;
+      activities = element.activities;
       endAt = element.endAt;
       founder = element.founder;
       id = element.id;
@@ -270,6 +273,7 @@ actor Main {
       name = element.name;
       raisedFund = element.raisedFund;
       tokens = TrieSet.toArray(element.tokens);
+      image = element.image;
       };
       result := Array.append(result, [temp]);
     };
@@ -288,7 +292,8 @@ actor Main {
         };
         let temp : Types.Fund = {
           createAt = fund.createAt;
-          description = fund.description;
+          story = fund.story;
+          activities = fund.activities;
           endAt = fund.endAt;
           founder = fund.founder;
           id = fund.id;
@@ -296,6 +301,7 @@ actor Main {
           name = fund.name;
           var raisedFund = fund.raisedFund;
           var tokens = TrieSet.fromArray<Nat>(tokens, Hash.hash, Nat.equal);
+          image = fund.image;
         };
         _funds.put(fundId, temp);
         return #ok("Done");
@@ -311,7 +317,8 @@ public query func getFundInfo(fundId : Nat) : async ?Types.FundExt {
       case (?fund) {
         let temp : Types.FundExt = {
           createAt = fund.createAt;
-          description = fund.description;
+          story = fund.story;
+          activities = fund.activities;
           endAt = fund.endAt;
           founder = fund.founder;
           id = fund.id;
@@ -319,6 +326,7 @@ public query func getFundInfo(fundId : Nat) : async ?Types.FundExt {
           name = fund.name;
           raisedFund = fund.raisedFund;
           tokens = TrieSet.toArray<Nat>(fund.tokens);
+          image = fund.image;
         };
         return ?temp;
       };
