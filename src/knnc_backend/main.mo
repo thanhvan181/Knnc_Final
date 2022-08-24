@@ -1,4 +1,6 @@
 import Array "mo:base/Array";
+import Debug "mo:base/Debug";
+import Float "mo:base/Float";
 import Hash "mo:base/Hash";
 import HashMap "mo:base/HashMap";
 import Iter "mo:base/Iter";
@@ -13,12 +15,17 @@ import Types "Types";
 actor Main {
   private stable var _userIndex = 0;
   private stable var _totalTokens = 0;
-  private stable var _totalFunds = 1;
+  private stable var _totalFunds = 0;
+  private stable var _totalCollections = 0;
   private var _users : HashMap.HashMap<Principal, Types.User> = HashMap.HashMap(1, Principal.equal, Principal.hash);
   private var _tokens : HashMap.HashMap<Nat, Types.Token> = HashMap.HashMap(1, Nat.equal, Hash.hash);
   private var _funds : HashMap.HashMap<Nat, Types.Fund> = HashMap.HashMap(1, Nat.equal, Hash.hash);
+  private var _collections : HashMap.HashMap<Nat, Types.Collection> = HashMap.HashMap(1, Nat.equal, Hash.hash);
+  private stable var numberPost = 0;
+  private stable var posts:[Types.Post] = [];
   private stable var _userEntries : [(Principal, Types.User)] = [];
   private stable var _tokensEntries : [(Nat, Types.Token)] = [];
+  private stable var _fundEntries : [(Nat, Types.Fund)] = [];
   private stable var _adminPrincipals : [Principal] = [
     Principal.fromText("2azua-e7lot-lbxmr-uf3zr-hc2qh-bocw7-euxcb-mzfzw-tpvog-oisgo-cqe"),
   ];
@@ -194,10 +201,9 @@ actor Main {
       let temp : Types.TokenInfoExt = {
         collection = element.collection;
         index = element.index;
-        operator = element.operator;
         owner = element.owner;
-        timestamp = element.timestamp;
         tokenMetadata = element.tokenMetadata;
+        price = element.price;
       };
       result := Array.append(result, [temp]);
     };
@@ -221,40 +227,94 @@ actor Main {
     return result;
   };
 
-  private func _newFund(fundExt : Types.FundExt) : Types.Fund {
-    
-    let result : Types.Fund = {
-      createAt = fundExt.createAt;
-      description = fundExt.description;
-      endAt = fundExt.endAt;
-      founder = fundExt.founder;
-      id = _totalFunds;
-      limit = fundExt.limit;
-      name = fundExt.name;
-      var raisedFund = 0;
-      var tokens = TrieSet.empty();
+  private func _addTokenTo(owner : Principal, token : Nat) : async () {
+    assert(_isUserExist(owner));
+    switch(_users.get(owner)) {
+      case null {
+        return;
+      };
+      case (?user) {
+        user.tokens := TrieSet.put<Nat>(user.tokens, token, 0, Nat.equal)
+      };
+    }
+  };
+
+  public func singleMint(owner : Principal, tokenMetadata : Types.TokenMetadata, collection : Text, price : Float) : async Types.MintResult {
+    assert(_isUserExist(owner));
+    switch(_getUserRole(owner)) {
+      case (verifiedUser) {
+        await _addTokenTo(owner,  await _mint(owner, tokenMetadata, collection, price));
+        return #ok;
+      };
     };
+  };
 
-    _totalFunds := _totalFunds + 1;
+  private func _mint(owner : Principal, tokenMetadata : Types.TokenMetadata, collection : Text, price : Float) : async Nat {
+    _totalTokens += 1;
+    let token: Types.Token = {
+      index = _totalTokens;
+      var owner = owner;
+      tokenMetadata = tokenMetadata ; 
+      collection = collection;
+       var price = price;
+      };
+    _tokens.put(_totalTokens, token);
+    // add token to owner
+    await _addTokenTo(owner, _totalTokens);
+    return _totalTokens;
+  };
+  
+  private func _batchMint(owner : Principal, tokenMetadata :  [Types.TokenMetadata], collection : Text,  numberOfTokens : Int, totalPrice : Float) : async [Nat] {
+    var result : [Nat] = [];
+    Debug.print("Batch mint calling");
+    var startIndex = _totalTokens;
+    var endIndex = startIndex + numberOfTokens;
 
+    for(index in Iter.range(0, numberOfTokens - 1)) {
+      
+      Debug.print("Batch mint calling");
+      let tokenIndex : Nat = await _mint(owner, tokenMetadata[index], collection, (totalPrice / Float.fromInt(numberOfTokens)));
+      Debug.print("Batch mint calling at " # Nat.toText(index));
+      result := Array.append<Nat>(result, [tokenIndex]);
+    };
     return result;
   };
 
-  public func createFund(who : Principal, fundInfo : Types.FundExt) : async Result.Result<Text, Text> {
-    assert (_isUserExist(who));
-    if(_isAdmin(who)) {
-      _funds.put(_totalFunds, _newFund(fundInfo));
-      return #ok("Ok");
+  private func _createCollection(name : Text, numberOfTokens : Nat, description : Text, tokens : [Types.TokenMetadata], owner : Principal, totalPrice : Float) : async Types.Collection {
+    Debug.print("Create collection calling");
+    let collection : Types.Collection = {
+      name = name;
+      description = description;
+      numberOfTokens = numberOfTokens;
+      tokens = TrieSet.fromArray<Nat>(await _batchMint(owner, tokens, name, numberOfTokens, totalPrice), Hash.hash, Nat.equal);
     };
-    switch(_getUserRole(who)) {
+    _totalCollections +=1;
+    _collections.put(_totalCollections, collection);
+    return collection;
+  };
+
+  public func createFund(founder : Principal, limit : Float, name : Text,  story : Text, activities : Text, endAt : Time.Time, image : Text, tokenMetadata : [Types.TokenMetadata],collectionName : Text, collectionDescription : Text) : async Result.Result<Text, Text> {
+    switch(_getUserRole) {
       case (organization) {
-        _funds.put(_totalFunds, _newFund(fundInfo));
-        return #ok("OK");
+        let collection = await _createCollection(collectionName, tokenMetadata.size(), collectionDescription, tokenMetadata, founder, limit);
+        _totalFunds +=1;
+        let fund : Types.Fund = {
+          activities = activities;
+          collection =  collection;
+          createAt = Time.now();
+          endAt = endAt;
+          founder = founder;
+          id = _totalFunds;
+          image = image;
+          limit = limit;
+          name = name;
+          var raisedFund = 0;
+          story = story;
+        };
+        _funds.put(_totalFunds, fund);
+        return #ok("Fund created")
       };
-      case null {
-        return #err("Just organization or admin can create fund")
-      };
-    };
+    }
   };
 
   public query func getAllFunds() : async [Types.FundExt] {
@@ -262,14 +322,21 @@ actor Main {
     for(element in _funds.vals()) {
       let temp : Types.FundExt = {
       createAt = element.createAt;
-      description = element.description;
+      story = element.story;
+      activities = element.activities;
       endAt = element.endAt;
       founder = element.founder;
       id = element.id;
       limit = element.limit;
       name = element.name;
       raisedFund = element.raisedFund;
-      tokens = TrieSet.toArray(element.tokens);
+      collection = {
+        description = element.collection.description;
+        name = element.collection.name;
+        numberOfTokens = element.collection.numberOfTokens;
+        tokens = TrieSet.toArray(element.collection.tokens)
+      };
+      image = element.image;
       };
       result := Array.append(result, [temp]);
     };
@@ -277,53 +344,126 @@ actor Main {
     return result;
   };
 
-  public func addTokensToFunds(who : Principal, fundId : Nat, tokens : [Nat]) : async Result.Result<Text, Text> {
+  public query func getFundInfoById(fundId : Nat) : async ?Types.FundExt {
     switch(_funds.get(fundId)) {
-      case null {
-        return #err("No fund with given id found");
-      };
-      case (?fund) {
-        if (fund.founder != who) {
-          return #err("You aren't the owner of this fund!")
+        case null {
+          return null;
         };
-        let temp : Types.Fund = {
-          createAt = fund.createAt;
-          description = fund.description;
-          endAt = fund.endAt;
-          founder = fund.founder;
-          id = fund.id;
-          limit = fund.limit;
-          name = fund.name;
-          var raisedFund = fund.raisedFund;
-          var tokens = TrieSet.fromArray<Nat>(tokens, Hash.hash, Nat.equal);
+        case (?fund) {
+          let temp : Types.FundExt = {
+            createAt = fund.createAt;
+            story = fund.story;
+            activities = fund.activities;
+            endAt = fund.endAt;
+            founder = fund.founder;
+            id = fund.id;
+            limit = fund.limit;
+            name = fund.name;
+            raisedFund = fund.raisedFund;
+            collection = {
+              description = fund.collection.description;
+              name = fund.collection.name;
+              numberOfTokens = fund.collection.numberOfTokens;
+              tokens = TrieSet.toArray(fund.collection.tokens)
+            };
+            image = fund.image;
+          };
+          return ?temp;
         };
-        _funds.put(fundId, temp);
-        return #ok("Done");
-      };
-    };  
-};
+      };  
+  };
 
-public query func getFundInfo(fundId : Nat) : async ?Types.FundExt {
-  switch(_funds.get(fundId)) {
+  public query func getAllCollections() : async [Types.CollectionExt] {
+    var result : [Types.CollectionExt] = [];
+    for(element in _collections.vals()) {
+      let temp : Types.CollectionExt = {
+          name = element.name;
+          numberOfTokens = element.numberOfTokens;
+          description = element.description;
+          tokens = TrieSet.toArray(element.tokens);
+        };
+      result := Array.append(result, [temp]);
+    };
+    return result;
+  };
+
+  public query func getCollectionById(collectionId : Nat) : async ?Types.CollectionExt {
+    switch(_collections.get(collectionId)) {
       case null {
         return null;
       };
-      case (?fund) {
-        let temp : Types.FundExt = {
-          createAt = fund.createAt;
-          description = fund.description;
-          endAt = fund.endAt;
-          founder = fund.founder;
-          id = fund.id;
-          limit = fund.limit;
-          name = fund.name;
-          raisedFund = fund.raisedFund;
-          tokens = TrieSet.toArray<Nat>(fund.tokens);
+      case (?collection) {
+        let result : Types.CollectionExt = {
+          name = collection.name;
+          numberOfTokens = collection.numberOfTokens;
+          description = collection.description;
+          tokens = TrieSet.toArray(collection.tokens);
         };
-        return ?temp;
+
+        return ?result;
+      }
+    }
+  };
+
+  
+
+  public func getTokenInfoById(id : Nat) : async ?Types.TokenInfoExt {
+    switch(_tokens.get(id)) {
+      case null {
+        return null;
       };
-    };  
-};
+      case (?token) {
+        let result : Types.TokenInfoExt = {
+          collection = token.collection;
+          index = token.index;
+          owner = token.owner;
+          tokenMetadata = token.tokenMetadata;
+          price = token.price;
+        };
+        return ?result;
+      };
+    };
+  };
+
+
+
+
+   public func newPost (title:Text , who:Principal , image:Text , content:Text , like :Nat , whoLikeThis:[Principal]) : async () {
+    let post : Types.Post = {
+      postId = numberPost;
+      title : Text = title ;
+      who : Principal = who ;
+      image : Text = image ;
+      content : Text = content ;
+      var like : Nat = like ;
+      var whoLikeThis  = whoLikeThis ;
+    };
+    posts := Array.append(posts, [post]);
+    numberPost +=1;
+  };
+
+  public query func getPosts () : async [Types.PostExt]{
+    var result : [Types.PostExt] = [];
+    for(val in posts.vals()){
+      let temp : Types.PostExt = {
+        postId = val.postId;
+        title = val.title;
+        who = val.who;
+        image = val.image;
+        content = val.content;
+        like = val.like;
+        whoLikeThis = val.whoLikeThis;
+      };
+      result := Array.append(result,[temp]);
+    };
+    result;
+  };
+
+  // todo?
+  // 1. Transfer
+  // 2. getAllTokenOfUser
+  // 3. setPrice for token
+  // 4. ...
 
 
 
@@ -331,13 +471,16 @@ public query func getFundInfo(fundId : Nat) : async ?Types.FundExt {
   system func preupgrade() {
     _userEntries := Iter.toArray<(Principal, Types.User)>(_users.entries());
     _tokensEntries := Iter.toArray<(Nat, Types.Token)>(_tokens.entries());
+    _fundEntries := Iter.toArray<(Nat, Types.Fund)>(_funds.entries());
   };
 
   // !!
   system func postupgrade() {
     _users := HashMap.fromIter<Principal, Types.User>(_userEntries.vals(), 1, Principal.equal, Principal.hash);
     _tokens := HashMap.fromIter<Nat, Types.Token>(_tokensEntries.vals(), 1, Nat.equal, Hash.hash);
+    _funds := HashMap.fromIter<Nat, Types.Fund>(_fundEntries.vals(), 1, Nat.equal, Hash.hash);
     _userEntries := [];
     _tokensEntries := [];
+    _fundEntries := [];
   };
 };

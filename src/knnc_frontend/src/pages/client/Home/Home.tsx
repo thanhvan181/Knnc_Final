@@ -1,6 +1,8 @@
+import { Principal } from "@dfinity/principal";
 import { Card, Carousel, List } from "antd";
 import { Typography } from 'antd';
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
+import { knnc_backend } from "../../../../../declarations/knnc_backend";
 import FeaturedItem from "../../../../components/Featured/FeaturedItem";
 import NewsItem from "../../../../components/News/NewsItem";
 const { Title } = Typography;
@@ -106,6 +108,14 @@ const NewsList = () => {
 type Props = {};
 
 const Home = (props: Props) => {
+
+  // lay cac quy, cac bai post o day 
+  useEffect(() => {
+   (async () => {
+   })()
+  }, [])
+
+
   return (
     <>
       <div className="container">
