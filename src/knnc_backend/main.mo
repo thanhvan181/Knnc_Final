@@ -8,12 +8,13 @@ import Result "mo:base/Result";
 import Time "mo:base/Time";
 import TrieSet "mo:base/TrieSet";
 import Types "Types";
+import _funds "mo:base/List";
 
 
 actor Main {
   private stable var _userIndex = 0;
   private stable var _totalTokens = 0;
-  private stable var _totalFunds = 1;
+  private stable var _totalFunds = 0;
   private var _users : HashMap.HashMap<Principal, Types.User> = HashMap.HashMap(1, Principal.equal, Principal.hash);
   private var _tokens : HashMap.HashMap<Nat, Types.Token> = HashMap.HashMap(1, Nat.equal, Hash.hash);
   private var _funds : HashMap.HashMap<Nat, Types.Fund> = HashMap.HashMap(1, Nat.equal, Hash.hash);
@@ -332,6 +333,30 @@ public query func getFundInfo(fundId : Nat) : async ?Types.FundExt {
       };
     };  
 };
+
+  public query func getFundById(id : Nat) : async ?Types.FundExt {
+    switch(_funds.get(id)) {
+      case null {
+        null
+      };
+      case (?fund) {
+        let result : Types.FundExt = {
+          id = fund.id;
+          activities = fund.activities;
+          createAt = fund.createAt;
+          endAt = fund.endAt;
+          founder = fund.founder;
+          image = fund.image;
+          limit = fund.limit;
+          name = fund.name;
+          raisedFund = fund.raisedFund;
+          story = fund.story;
+          tokens = TrieSet.toArray(fund.tokens);
+        };
+        return ?result;
+      };
+    };
+  };
 
 
 
