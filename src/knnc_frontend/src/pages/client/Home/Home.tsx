@@ -112,23 +112,6 @@ const Home = (props: Props) => {
   // lay cac quy, cac bai post o day 
   useEffect(() => {
    (async () => {
-    let funds = await knnc_backend.getAllFunds()
-    console.log(funds);
-    let result = await knnc_backend.createFund(Principal.from("wmozx-tvt5v-wtr4o-grob6-7mwb7-aaf7a-ihdc2-muoip-4gvj3-al3gx-iae"), {
-      'id' : BigInt(0),
-      'createAt' : BigInt(Date.now()),
-      'name' : "name test",
-      'story' : 'description test',
-      'activities' : 'this activity',
-      'endAt' : BigInt(Date.now() + 10000),
-      'limit' : BigInt(100),
-      'tokens' : [],
-      'founder' : Principal.from("wmozx-tvt5v-wtr4o-grob6-7mwb7-aaf7a-ihdc2-muoip-4gvj3-al3gx-iae"),
-      'raisedFund' : 0,
-      'image' : 'this is image'
-    })
-    console.log(result);
-    
    })()
   }, [])
 

@@ -14,9 +14,8 @@ module {
         index : Nat;
         owner : Principal;
         tokenMetadata : TokenMetadata;
-        operator : TokenOperator;
-        timestamp : Time.Time;
         collection : Text;
+        price : Float;
     };
 
     public type UserExt = {
@@ -44,15 +43,10 @@ module {
         index : Nat;
         var owner : Principal;
         tokenMetadata : TokenMetadata;
-        var operator : TokenOperator;
-        var timestamp : Time.Time;
         collection : Text;
+        var price : Float;
     };
 
-    public type TokenOperator = {
-        #mint;
-        #transfer;
-    };
 
     public type MintResult = {
         #error;
@@ -66,7 +60,6 @@ module {
 
     public type TxRecord = {
         caller : Principal;
-        operator : TokenOperator;
         txIndex : Nat;
         tokenIndex : Nat;
         from : Record;
@@ -77,10 +70,10 @@ module {
     public type Fund = {
         id : Nat;
         founder : Principal;
-        limit  : Nat;
+        limit  : Float;
         var raisedFund : Float;
         name : Text;
-        var tokens : TrieSet.Set<Nat>;
+        collection : Collection;
         story : Text;
         activities : Text;
         createAt : Time.Time;
@@ -91,16 +84,50 @@ module {
     public type FundExt = {
         id : Nat;
         founder : Principal;
-        limit  : Nat;
+        limit  : Float;
         raisedFund : Float;
         name : Text;
-        tokens : [Nat];
+        collection : CollectionExt;
         story : Text;
         activities : Text;
         createAt : Time.Time;
         endAt : Time.Time;
         image : Text;
     };
+
+    public type Collection = {
+        name : Text;
+        numberOfTokens : Nat;
+        description : Text;
+        tokens : TrieSet.Set<Nat>;
+    };
+
+    public type CollectionExt = {
+        name : Text;
+        numberOfTokens : Nat;
+        description : Text;
+        tokens : [Nat];
+    };
+
+    public type Post = {
+        postId : Nat;
+        title : Text;
+        who : Principal;
+        image : Text;
+        content : Text;
+        var like : Nat;
+        var whoLikeThis : [Principal];
+    };
+
+    public type PostExt = {
+        postId : Nat;
+        title : Text;
+        who : Principal;
+        image : Text;
+        content : Text;
+        like : Nat;
+        whoLikeThis : [Principal];
+    }
     
     
 }
