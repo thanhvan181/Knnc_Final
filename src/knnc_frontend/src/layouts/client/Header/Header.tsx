@@ -87,7 +87,7 @@ const Header = (props: Props) => {
             <ul>
               <li><Link to={'/'}>Trang chủ</Link></li>
               <li><Link to={'/launch'}>Hòm Quỹ</Link></li>
-              <li><Link to={'/'}>Chợ tình thương</Link></li>
+              <li><Link to={'/market'}>Chợ tình thương</Link></li>
             </ul>
           </nav>
         </Col>
