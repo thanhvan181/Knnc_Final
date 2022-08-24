@@ -10,6 +10,10 @@ import './normalize.css'
 import './variable.css';
 import Launch from "./pages/client/Launchpad/Launch";
 import Detail from "./pages/client/Launchpad/Detail";
+import DetailM from "./pages/client/Market/Detail";
+import Market from "./pages/client/Market/Market";
+
+
 
 
 ConfigProvider.config({
@@ -28,14 +32,18 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="launch">
             <Route index element={<Detail />} />
-            <Route path="detail"  element={<Detail />}/>
+            <Route path="detail" element={<Detail />} />
+          </Route>
+          <Route path="market">
+            <Route index element={<DetailM />} />
+            <Route path="detail" element={<DetailM />} />
           </Route>
         </Route>
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<TestAdmin />} />
-          <Route path="test" element={<TestAdmin />}/>
+          <Route path="test" element={<TestAdmin />} />
         </Route>
-      </Routes> 
+      </Routes>
     </div>
   );
 }
