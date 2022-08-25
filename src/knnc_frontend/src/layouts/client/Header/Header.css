@@ -13,21 +13,16 @@
 }
 
 .bl-logo {
-    margin-top: 36px;
+    margin-top: -28px;
     margin-left: -200px;
-    height: 100px;
 }
 
-.logo {
-    border: 1px solid var(--text-color);
-    background-color: var(--text-color);
-    color: black;
-    height: 100%;
-    padding: 42px 28px;
-}
-.menu{
+.logo {}
+
+.menu {
     margin-left: -25px;
 }
+
 ul {
     margin: 36px 0px;
 }
@@ -66,7 +61,8 @@ li a:hover {
     background-color: var(--primary);
     font-weight: bold;
 }
-.balance{
+
+.balance {
     border: 1px solid snow;
     border-radius: 5px;
     color: var(--text-color);
@@ -74,13 +70,15 @@ li a:hover {
     font-weight: bold;
     margin-right: 20px;
 }
-.iconLogin{
+
+.iconLogin {
     margin-top: -12px;
     margin-left: 100px;
 }
-.nameLogin{
+
+.nameLogin {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    
+
 }
