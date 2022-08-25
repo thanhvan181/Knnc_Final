@@ -10,6 +10,7 @@ import Result "mo:base/Result";
 import Time "mo:base/Time";
 import TrieSet "mo:base/TrieSet";
 import Types "Types";
+import _users "mo:base/List";
 
 
 actor Main {
@@ -39,6 +40,17 @@ actor Main {
       case (?any) {
         return true;
       };
+    };
+  };
+
+  private func _isTokenExist(tokenId : Nat) : Bool {
+    switch(_tokens.get(tokenId)) {
+      case (null) {
+        return false;
+      };
+      case (?token) {
+        return true;
+      }
     };
   };
 
@@ -227,9 +239,9 @@ actor Main {
     return result;
   };
 
-  private func _addTokenTo(owner : Principal, token : Nat) : async () {
-    assert(_isUserExist(owner));
-    switch(_users.get(owner)) {
+  private func _addTokenTo(who : Principal, token : Nat) : async () {
+    assert(_isUserExist(who));
+    switch(_users.get(who)) {
       case null {
         return;
       };
@@ -237,6 +249,38 @@ actor Main {
         user.tokens := TrieSet.put<Nat>(user.tokens, token, 0, Nat.equal)
       };
     }
+  };
+
+  private func _removeTokenFrom(who : Principal, tokenId : Nat) : async () {
+    assert(_isUserExist(who));
+    switch(_users.get(who)) {
+      case (?user) {
+        var userTokens = TrieSet.toArray(user.tokens);
+        userTokens := Array.filter(userTokens, func (i : Nat) : Bool {
+          i != tokenId;
+        });
+        user.tokens := TrieSet.fromArray<Nat>(userTokens, Hash.hash, Nat.equal);
+        _users.put(who, user);
+      };
+      case null {
+
+      };
+    };
+  };
+
+  private func _changeTokenOwner(to : Principal, tokenId : Nat) : async () {
+    assert(_isUserExist(to));
+    assert(_isTokenExist(tokenId));
+
+    switch(_tokens.get(tokenId)) {
+      case (?token) {
+        token.owner := to;
+        _tokens.put(tokenId, token);
+      };
+      case null {
+
+      };
+    };
   };
 
   public func singleMint(owner : Principal, tokenMetadata : Types.TokenMetadata, collection : Text, price : Float) : async Types.MintResult {
@@ -294,7 +338,7 @@ actor Main {
   };
 
   public func createFund(founder : Principal, limit : Float, name : Text,  story : Text, activities : Text, endAt : Time.Time, image : Text, tokenMetadata : [Types.TokenMetadata],collectionName : Text, collectionDescription : Text) : async Result.Result<Text, Text> {
-    switch(_getUserRole) {
+    switch(_getUserRole(founder)) {
       case (organization) {
         let collection = await _createCollection(collectionName, tokenMetadata.size(), collectionDescription, tokenMetadata, founder, limit);
         _totalFunds +=1;
@@ -407,7 +451,7 @@ actor Main {
 
   
 
-  public func getTokenInfoById(id : Nat) : async ?Types.TokenInfoExt {
+  public query func getTokenInfoById(id : Nat) : async ?Types.TokenInfoExt {
     switch(_tokens.get(id)) {
       case null {
         return null;
@@ -459,11 +503,89 @@ actor Main {
     result;
   };
 
+  public query func getTokensOfUser(who : Principal) : async ?[Nat] {
+    assert(_isUserExist(who));
+
+    switch(_users.get(who)) {
+      case null {
+        return null;
+      };
+      case (?user) {
+        let result : [Nat] = TrieSet.toArray(user.tokens);
+        return ?result;
+      };
+
+    };
+  };
+
+  private func _isOwn(tokenId: Nat, who : Principal) : Bool {
+    assert(_isUserExist(who));
+    assert(_isTokenExist(tokenId));
+
+    switch(_users.get(who)) {
+      case null {
+        false;
+      };
+      case (?user) {
+        let userTokens = TrieSet.toArray(user.tokens);
+        switch(Array.find(userTokens, func (i : Nat) : Bool {
+          i == tokenId
+        })) {
+          case null {
+            return false;
+          };
+          case (?any) {
+            return true;
+          };
+        }
+      };
+    };
+  };
+
+  public func setTokenPrice(who : Principal,tokenId : Nat, newPrice : Float ) : async Result.Result<Text, Text> {
+    assert(_isUserExist(who));
+    assert(_isTokenExist(tokenId));
+    assert(_isOwn(tokenId, who));
+
+    switch(_tokens.get(tokenId)) {
+      case (?token) {
+        token.price := newPrice;
+        _tokens.put(tokenId, token);
+        return #ok("Price changed");
+      };
+      case null {
+        return #err("There's something bad happened")
+      }
+    };
+
+
+
+
+    return #ok("Price changed");
+  };
+
+
+  public func transferToken(from : Principal,to : Principal, tokenId : Nat) : async Result.Result<Text, Text> {
+    assert(_isUserExist(from));
+    assert(_isUserExist(to));
+    assert(_isTokenExist(tokenId));
+    assert(_isOwn(tokenId, from));
+
+    await _addTokenTo(to, tokenId);
+    await _removeTokenFrom(from, tokenId);
+    await _changeTokenOwner(to, tokenId);
+    return #ok("OK")
+  };
+
+
+
+  
+
+
   // todo?
-  // 1. Transfer
-  // 2. getAllTokenOfUser
-  // 3. setPrice for token
-  // 4. ...
+  // 1. Implement web3.storage to store user image link
+  // 2. Improve mint NFT 
+  // 3. Something new ....
 
 
 

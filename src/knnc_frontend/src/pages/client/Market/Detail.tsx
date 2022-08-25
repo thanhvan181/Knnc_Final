@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Row, Col, Button } from 'antd'
 import './Detail.css'
+import { knnc_backend } from '../../../../../declarations/knnc_backend'
+import { Variant, VariantClass,  } from '@dfinity/candid/lib/cjs/idl'
+import { Principal } from '@dfinity/principal'
+import { IDL, VariantForm } from '@dfinity/candid'
 
 type Props = {}
 
 const DetailM = (props: Props) => {
+  useEffect(() => {
+    (async ()=> {
+      
+    })()
+  }, [])
+  
   return (
     <>
       <div className="bl-detail">
