@@ -79,7 +79,7 @@ const Header = (props: Props) => {
       <Row gutter={[4, 16]}>
         <Col span={8} className="grid-1">
           <div className='bl-logo'>
-            <span className="logo">Logo</span>
+            <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1661443624/logo_chim-01-03_obecwg.png" alt="" className="logo"  width="150px"  height="150px"/>
           </div>
         </Col>
         <Col span={8} className="grid-2">
