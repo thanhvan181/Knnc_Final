@@ -5,23 +5,35 @@ import { Col, Divider, Row, Typography, Form, Input, Button } from "antd";
 import type { UploadProps } from "antd";
 import { message, Upload } from "antd";
 import { useState } from "react";
+import { Web3Storage } from "web3.storage";
+import { knnc_backend } from "../../../../../declarations/knnc_backend";
+import { Principal } from "@dfinity/principal";
 
 const { Title } = Typography;
 type Props = {};
 const { Dragger } = Upload;
+const APIKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEM1MGMyNzE3MjZiNzBERGM0OTE3MDVCZUExNTQ4MGVhNEMzQjc5NDkiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTg5Nzc4MDUzMjYsIm5hbWUiOiJ0ZXN0X3Rva2VuIn0.pjPPLiFMyzAOfZ-Y5TQ_I40IAjrRYAjj3Z9eY_EtG7E"
 
 const ProductAdd = (props: Props) => {
+    const web3Client = new Web3Storage({
+        token: APIKey
+    })
 
     const [form] = Form.useForm();
     const [fileList, setFileList] = useState([]);
     const [dataForm, setDataForm] = useState({
         file: '',
-        price: ''
+        price: '',
+        name: ''
     });
+    const [file, setFile] = useState<Element>()
+    console.log(form);
+
     console.log("dataForm", dataForm)
 
     const handleBeforeUpload = (file: any) => {
-        // setDataForm(prev => ({ ...prev, file }));
+        setDataForm(prev => ({ ...prev, file }));
+        setFile(document.querySelector('input[type="file"]'))
         return false;
     };
 
@@ -34,6 +46,7 @@ const ProductAdd = (props: Props) => {
 
         const img = dataInput.file.file;
         const price = dataInput.price;
+        const name = dataInput.name;
 
         const onUploadForm = async () => {
             console.log(img);
@@ -55,18 +68,83 @@ const ProductAdd = (props: Props) => {
         };
         onUploadForm();
 
-        // setDataForm((prev)=> ({...prev, file: dataInput.}))
+        setDataForm((prev) => ({ ...prev, file: dataInput }))
 
-        // console.log(dataInput);
+        console.log(dataInput);
 
     }
 
+    const [mintable, setMintable] = useState(false)
+    const [imageLink, setImageLink] = useState("")
+    const [tokenUri, setTokenUri] = useState("")
+
+    const uploadToIPFS = async () => {
+        console.log(file);
+
+
+            // @ts-ignore
+            const rootCid = await web3Client.put(file.files)
+            console.log(rootCid);
+            const res = await web3Client.get(rootCid)
+            const files = await res.files()
+            for (const file of files) {
+
+                //@ts-ignore
+                // console.log(`${file.cid} ${file.name} ${file.size}`)
+                //@ts-ignore
+                let url = 'https://' + rootCid + ".ipfs.w3s.link/" + encodeURIComponent(file.name)
+                console.log(url);
+                setImageLink(url)
+
+                // if (await window.ic.plug.sessionManager.sessionData.principalId == null) {
+                //     console.log("Bạn chưa đăng nhập!");
+                //     return;
+                // }
+
+                // if (Number(dataForm.price) === 10000) {
+                //     console.log("Giá bằng 0!");
+                //     return;
+                // }
+
+                setMintable(true);
+                setTokenUri(url);
+                
+
+                
+            }
+
+            
+
+            
+    }
+
+    const mint = async () => {
+            let mintResult = await knnc_backend.singleMint(
+                Principal.from(await window.ic.plug.sessionManager.sessionData.principalId),
+                {
+                    'tokenUri': tokenUri,
+                    'tokenName': dataForm.name,
+                    'createAt': BigInt(Date.now())
+                },
+                "No collection",
+                //@ts-ignore
+                1
+            );
+
+        
+    }
+
+
+
+
     return (
+
         <S.WrapperProductAdd>
+            
             <Title level={3}>Đăng bán</Title>
             <Divider />
             <Form form={form} onFinish={onFinish}>
-                <Form.Item name="file">
+                <Form.Item name="file" >
                     <Dragger {...propsUpload} fileList={fileList}>
                         <p className="ant-upload-drag-icon">
                             <InboxOutlined />
@@ -76,10 +154,17 @@ const ProductAdd = (props: Props) => {
                         </p>
                     </Dragger>
                 </Form.Item>
+                {/* <input type="file" id="file" className="file" /> */}
+
                 <Form.Item name="price">
                     <Input type="number" placeholder="nhap prrice " required />
                 </Form.Item>
-                <Button htmlType="submit">Add</Button>
+                <Form.Item name="name">
+                    <Input type="text" id="name" placeholder="nhap name " required />
+                </Form.Item>
+                <button onClick={uploadToIPFS}>Upload to IPFS</button>
+                <Button htmlType="submit" onClick={mint} disabled={!mintable}>Mint</Button>
+                {imageLink === "" ? <img style={{width:300, height:200}}></img> : <img style={{width:300, height:200}} src={imageLink} ></img>}
             </Form>
         </S.WrapperProductAdd>
     );
