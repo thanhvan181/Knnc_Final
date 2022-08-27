@@ -1,6 +1,9 @@
 import { Col, Row } from 'antd'
 import React from 'react'
+import Fund from './components/Fund/Fund'
 import PieCharts from './components/PieChart/PieChart'
+import TableList from './components/Table/Table'
+
 
 interface Props {
     
@@ -15,8 +18,15 @@ const Chars = (props: Props) => {
 
 
                 </Col>
-                <Col flex="auto">Fill Rest</Col>
+                <Col flex="auto">
+
+                    <Fund/>
+                </Col>
+                
             </Row>
+            <TableList />
+
+           
         </>
        
     )
