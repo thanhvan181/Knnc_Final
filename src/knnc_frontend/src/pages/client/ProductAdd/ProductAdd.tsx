@@ -96,10 +96,10 @@ const ProductAdd = (props: Props) => {
                 console.log(url);
                 setImageLink(url)
 
-                // if (await window.ic.plug.sessionManager.sessionData.principalId == null) {
-                //     console.log("Bạn chưa đăng nhập!");
-                //     return;
-                // }
+                if (window.ic.plug.sessionManager.sessionData.principalId === null) {
+                    console.log("Bạn chưa đăng nhập!");
+                    return;
+                }
 
                 // if (Number(dataForm.price) === 10000) {
                 //     console.log("Giá bằng 0!");

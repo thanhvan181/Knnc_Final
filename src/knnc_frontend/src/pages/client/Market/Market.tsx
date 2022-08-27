@@ -18,7 +18,7 @@ const Market = (props: Props) => {
           user: Principal.from(e.owner).toString(),
           name: e.tokenMetadata.tokenName,
           price: e.price,
-          desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores nesciunt sunt rerum officia accusantium sapiente quidem nemo",
+          id : e.index
         }
         setData([...data, temp])
       })
