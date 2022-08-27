@@ -1,4 +1,5 @@
 import Array "mo:base/Array";
+import Cap "./cap/Cap";
 import Debug "mo:base/Debug";
 import Float "mo:base/Float";
 import Hash "mo:base/Hash";
@@ -7,9 +8,11 @@ import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
+import Root "./cap/Root";
 import Time "mo:base/Time";
 import TrieSet "mo:base/TrieSet";
 import Types "Types";
+import _FTRecord "mo:base/Array";
 
 
 actor Main {
@@ -29,6 +32,239 @@ actor Main {
   private stable var _adminPrincipals : [Principal] = [
     Principal.fromText("2azua-e7lot-lbxmr-uf3zr-hc2qh-bocw7-euxcb-mzfzw-tpvog-oisgo-cqe"),
   ];
+  private stable let _FTName : Text = "BeeToken";
+  private stable let _FTOwner : Principal = _adminPrincipals[0];
+  private stable let _FTSymbol : Text = "BEE";
+  private stable let _FTDecimals : Nat8  = 8;
+  private stable let _FTTotalSupply : Nat = 1_000_000_000;
+  private stable var _FTFee = 1_000;
+  private stable var txcounter: Nat = 0;
+  private var cap: ?Cap.Cap = null;
+  private stable var blackhole : Principal = Principal.fromText("aaaaa-aa");
+  private var _FTBalance : HashMap.HashMap<Principal, Nat> = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
+  private stable var _FTBalanceEntries : [(Principal, Nat)] = [];
+  _FTBalance.put(_FTOwner, _FTTotalSupply);
+  private var _FTRecord = HashMap.HashMap<Nat, Types.FTTxRecord>(1, Nat.equal, Hash.hash);
+  private var _NFTRecord = HashMap.HashMap<Nat, Types.NFTTxRecord>(1, Nat.equal, Hash.hash);
+  private var _FTRecordEntries : [(Nat, Types.FTTxRecord)] = [];
+  private var _NFTRecordEntries : [(Nat, Types.NFTTxRecord)] = [];
+
+
+  private stable let _genesis : Types.FTTxRecord = {
+        caller = ?_FTOwner;
+        op = #mint;
+        index = 0;
+        from = blackhole;
+        to = _FTOwner;
+        amount = _FTTotalSupply;
+        fee = 0;
+        timestamp = Time.now();
+        status = #succeeded;
+  };
+
+  private stable var _adminInfo : Types.User = {
+    var FTTokens = _FTTotalSupply;
+    var address = ?"FPT Polytechnic HN";
+    var image = ?"implement soon";
+    var name = ?"Admin";
+    var phoneNumber = ?"Implement soon";
+    principal = _FTOwner;
+    var role = #admin;
+    var tokens = TrieSet.empty();
+  };
+
+  _users.put(_FTOwner, _adminInfo);
+
+   private func _addFTRecord(
+        operation : Types.Operation,
+        from : Principal, 
+        to : Principal,
+        amount : Nat,
+        fee : Nat,
+        timestamp : Time.Time,
+        status : Types.TransactionStatus
+        ): async () {
+        txcounter +=1;
+        let record : Types.FTTxRecord = {
+          amount = amount;
+          caller = ?from;
+          fee = fee;
+          from = from;
+          index = txcounter;
+          op = operation;
+          status = status;
+          timestamp = timestamp;
+          to = to;
+        };
+        _FTRecord.put(txcounter,record);
+    };
+
+    private func _addNFTTxRecord(
+      from : Principal,
+      to : Principal,
+      tokenId : Nat,
+      operator : Types.Operation,
+      timestamp : Time.Time,
+    ) : async () {
+      txcounter +=1;
+      let record : Types.NFTTxRecord = {
+        operator = operator;
+        timestamp = timestamp;
+        to = to;
+        tokenId = tokenId;
+        from = from;
+      };
+      _NFTRecord.put(txcounter, record);
+    };
+
+    public query func getFTTokenName() : async Text {
+      _FTName;
+    };
+
+    public query func getFTTokenSupply() : async Nat {
+      _FTTotalSupply;
+    };
+
+    public query func getFTTokenInfo() : async Types.FTMetadata {
+      return {
+        name = _FTName;
+        owner = _FTOwner;
+        symbol = _FTSymbol;
+        decimal = _FTDecimals;
+        totalSupply = _FTTotalSupply;
+        fee = _FTFee;
+      }
+    };
+
+    private func _FTBalanceOf(who : Principal) : Nat {
+      switch(_users.get(who)) {
+        case (?user) {
+          let result : Nat = user.FTTokens;
+          return result;
+        };
+        case null {
+          0;
+        }
+      }
+    };
+
+    private func _chargeFee(spender : Principal, reciever : Principal,  fee : Nat) : async () {
+      if(fee > 0) {
+        await _addFTTokenTo(reciever, fee);
+        await _removeFTFrom(spender, fee);
+      };
+    };
+
+  private func _removeFTFrom(who : Principal, amount : Nat) : async ()  {
+      assert(_isUserExist(who));
+      switch(_users.get(who)) {
+        case (?user) {
+          user.FTTokens := user.FTTokens - amount;
+        };
+        case null {
+
+        };
+      };
+  };
+
+  public func setFTFee(newFee : Nat, who : Principal) : async () {
+    assert(who == _FTOwner);
+    _FTFee := newFee;
+  };
+
+  private func _addFTTokenTo(who : Principal, amount : Nat) : async () {
+      assert(_isUserExist(who));
+      switch(_users.get(who)) {
+        case (?user) {
+          user.FTTokens := user.FTTokens + amount ;
+        };
+        case null {
+
+        };
+      };
+  };
+
+  public query func getFTTokenOfUser(who : Principal) : async Nat {
+    switch(_users.get(who)) {
+      case (?user) {
+        return user.FTTokens;
+      };
+      case null {
+        0;
+      };
+    };
+  };
+
+  private func _getFTHolders() : [Principal] {
+    var result : [Principal] = [];
+    for(element in _users.vals()) {
+      if(element.FTTokens > 0) {
+        result := Array.append(result, [element.principal]);
+      }
+    };
+    return result;
+  };
+
+  public query func getFTHolders() : async [Principal] {
+    var result : [Principal] = [];
+    for(element in _users.vals()) {
+      if(element.FTTokens > 0) {
+        result := Array.append(result, [element.principal]);
+      }
+    };
+    return result;
+  };
+
+
+    
+
+  public func transferFTFrom(from : Principal, to : Principal, amount : Nat) : async Result.Result<Text, Text> {
+      assert (_FTBalanceOf(from) > _FTFee);
+      assert (_isUserExist(from));
+      assert (_isUserExist(to));
+      assert (_FTBalanceOf(from) > amount);
+      assert (amount > _FTFee);
+      await _addFTTokenTo(to, amount);
+      await _removeFTFrom(from, amount);
+      await _chargeFee(from, _FTOwner, _FTFee);
+
+      ignore _addFTRecord(
+        #mint,
+        from,
+        to, 
+        amount,
+        _FTFee,
+        Time.now(),
+        #succeeded
+      );
+
+      return #ok("OK");
+  };
+
+  public func allowanceFT(from : Principal, to : Principal, amount : Nat) : async Result.Result<Text, Text> {
+    assert (from == _FTOwner);
+    assert (_FTBalanceOf(_FTOwner) > amount );
+    await _addTokenTo(to, amount);
+    await _removeFTFrom(from, amount);
+    return #ok("OK");
+  };
+
+  public query func getFTRecords() : async [Types.FTTxRecord] {
+    return Iter.toArray(_FTRecord.vals());
+  };
+
+
+
+
+
+
+ 
+
+
+
+
+
+
 
   // Check if user exist
   private func _isUserExist(principal : Principal) : Bool {
@@ -69,6 +305,7 @@ actor Main {
 
   // Create new user
   private func _newUser(principal : Principal) : Types.User {
+    assert(not _isAdmin(principal));
     let newUser : Types.User = {
       principal : Principal = principal;
       var name : ?Text = null;
@@ -77,6 +314,7 @@ actor Main {
       var tokens = TrieSet.empty();
       var address = null;
       var phoneNumber = null;
+      var FTTokens = 0;
     };
   };
 
@@ -110,6 +348,7 @@ actor Main {
           var tokens = user.tokens;
           var address = null;
           var phoneNumber = null;
+          var FTTokens = user.FTTokens;
         };
         _users.put(principal, temp);
         return #err("User info changed"); 
@@ -143,6 +382,8 @@ actor Main {
       };
     }; 
   };
+  
+
 
   public query func getUserRole(principal : Principal) : async  ?Types.UserRole   {
     switch(_users.get(principal)) {
@@ -182,6 +423,7 @@ actor Main {
           tokens = TrieSet.toArray(user.tokens);
           address = user.address;
           phoneNumber = user.phoneNumber;
+          FTTokens = user.FTTokens;
         };
 
         return ?result;
@@ -239,6 +481,7 @@ actor Main {
         tokens = TrieSet.toArray(element.tokens);
         address = element.address;
         phoneNumber = element.phoneNumber;
+        FTTokens = element.FTTokens;
       };
       result := Array.append(result, [temp]);
     };
@@ -484,7 +727,7 @@ actor Main {
     var result = 0;
     for (element in _users.vals()) {
       switch(element.role) {
-        case (verifiedUser) {
+        case (#verifiedUser) {
           result+=1;
         };
       };
@@ -503,7 +746,7 @@ actor Main {
 
 
 
-   public func newPost (title:Text , who:Principal , image:Text , content:Text , like :Nat , whoLikeThis:[Principal]) : async () {
+  public func newPost (title:Text , who:Principal , image:Text , content:Text , like :Nat , whoLikeThis:[Principal]) : async () {
     let post : Types.Post = {
       postId = numberPost;
       title : Text = title ;
@@ -572,7 +815,25 @@ actor Main {
       };
     };
   };
-
+public query func getPostById (id : Nat) : async [Types.PostExt]{
+    var result : [Types.PostExt] = [];
+    for(val in posts.vals()){
+      if(val.postId == id){
+        let temp : Types.PostExt = {
+        postId = val.postId;
+        title = val.title;
+        who = val.who;
+        image = val.image;
+        content = val.content;
+        like = val.like;
+        whoLikeThis = val.whoLikeThis;
+        };
+        result := Array.append(result,[temp]);
+        return result;
+      };
+    };
+    result;
+  };
   public func setTokenPrice(who : Principal,tokenId : Nat, newPrice : Float ) : async Result.Result<Text, Text> {
     assert(_isUserExist(who));
     assert(_isTokenExist(tokenId));
@@ -589,9 +850,6 @@ actor Main {
       }
     };
 
-
-
-
     return #ok("Price changed");
   };
 
@@ -605,6 +863,8 @@ actor Main {
     await _addTokenTo(to, tokenId);
     await _removeTokenFrom(from, tokenId);
     await _changeTokenOwner(to, tokenId);
+
+    
     return #ok("OK")
   };
 
@@ -625,6 +885,9 @@ actor Main {
     _userEntries := Iter.toArray<(Principal, Types.User)>(_users.entries());
     _tokensEntries := Iter.toArray<(Nat, Types.Token)>(_tokens.entries());
     _fundEntries := Iter.toArray<(Nat, Types.Fund)>(_funds.entries());
+    _FTBalanceEntries := Iter.toArray<(Principal, Nat)>(_FTBalance.entries());
+    _FTRecordEntries := Iter.toArray<(Nat, Types.FTTxRecord)>(_FTRecord.entries());
+    _NFTRecordEntries := Iter.toArray<(Nat, Types.NFTTxRecord)>(_NFTRecord.entries());
   };
 
   // !!
@@ -632,8 +895,16 @@ actor Main {
     _users := HashMap.fromIter<Principal, Types.User>(_userEntries.vals(), 1, Principal.equal, Principal.hash);
     _tokens := HashMap.fromIter<Nat, Types.Token>(_tokensEntries.vals(), 1, Nat.equal, Hash.hash);
     _funds := HashMap.fromIter<Nat, Types.Fund>(_fundEntries.vals(), 1, Nat.equal, Hash.hash);
+    _FTBalance := HashMap.fromIter<Principal, Nat>(_FTBalanceEntries.vals(), 1, Principal.equal, Principal.hash);
+    _FTRecord := HashMap.fromIter<Nat, Types.FTTxRecord>(_FTRecordEntries.vals(), 1, Nat.equal, Hash.hash);
+    _NFTRecord := HashMap.fromIter<Nat, Types.NFTTxRecord>(_NFTRecordEntries.vals(), 1, Nat.equal, Hash.hash);
     _userEntries := [];
     _tokensEntries := [];
     _fundEntries := [];
+    _FTBalanceEntries := [];
+    _FTRecordEntries := [];
+    _NFTRecordEntries := [];
+    
+
   };
 };

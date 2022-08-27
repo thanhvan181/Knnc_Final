@@ -8,6 +8,7 @@ module {
         var image : ?Text;
         var role : UserRole;
         var tokens : TrieSet.Set<Nat>;
+        var FTTokens : Nat;
         var address: ?Text;
         var phoneNumber : ?Text;
     };
@@ -27,6 +28,7 @@ module {
         image : ?Text;
         tokens : [Nat];
         address: ?Text;
+        FTTokens : Nat;
         phoneNumber : ?Text;
     };
 
@@ -60,15 +62,6 @@ module {
     public type Record = {
       #user : Principal;
       #metadata : TokenMetadata  
-    };
-
-    public type TxRecord = {
-        caller : Principal;
-        txIndex : Nat;
-        tokenIndex : Nat;
-        from : Record;
-        to : Record;
-        timestamp : Time.Time;
     };
 
     public type Fund = {
@@ -133,7 +126,52 @@ module {
         whoLikeThis : [Principal];
     };
 
+    public type Operation = {
+        #mint;
+        #burn;
+        #transfer;
+        #transferFrom;
+        #approve;
+    };
+    public type TransactionStatus = {
+        #succeeded;
+        #inprogress;
+        #failed;
+    };
+    /// Update call operation record fields
+    public type FTTxRecord = {
+        caller: ?Principal;
+        op: Operation;
+        index: Nat;
+        from: Principal;
+        to: Principal;
+        amount: Nat;
+        fee: Nat;
+        timestamp: Time.Time;
+        status: TransactionStatus;
+    };
+
+    public type NFTTxRecord = {
+        from : Principal;
+        to : Principal;
+        tokenId : Nat;
+        operator : Operation;
+        timestamp : Time.Time;
+    };
+
+    public type FTMetadata = {
+        name : Text;
+        owner : Principal;
+        symbol : Text;
+        decimal : Nat8;
+        totalSupply : Nat;
+        fee : Nat;
+    };
+
+
     
+    
+
     
     
 }

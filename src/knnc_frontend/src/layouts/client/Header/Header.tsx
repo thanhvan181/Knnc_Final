@@ -44,7 +44,11 @@ const Header = (props: Props) => {
 
 
       let createUser = await knnc_backend.createUser(await Principal.from(window.ic.plug.sessionManager.sessionData.principalId))
-      console.log(createUser);
+      try {
+        console.log(createUser);
+      } catch (error) {
+        console.log("Admin");
+      };
       let userInfo = await knnc_backend.getUserInfoByPrincipal(Principal.from(await window.ic.plug.sessionManager.sessionData.principalId))
       console.log(userInfo);
 
@@ -122,7 +126,7 @@ const Header = (props: Props) => {
          </Dropdown>: ""}
             <Button className="login" onClick={loginWithPlug}>
               <Space size={size} className='nameLogin'>
-                {connected ? "Profile" : "Authenticate"} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
+                {connected ? "Connected" : "Authenticate"} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
               </Space>
             </Button>
           </div>
