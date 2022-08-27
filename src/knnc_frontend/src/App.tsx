@@ -4,10 +4,9 @@ import { Routes, Route, NavLink, Navigate, Link } from "react-router-dom";
 import ClientLayout from "./layouts/client/ClientLayout";
 import AdminLayout from "./layouts/admin/AdminLayout";
 import Home from "./pages/client/Home/Home";
-import TestAdmin from "./pages/admin/TestAdmin";
-import { ConfigProvider } from "antd";
-import './normalize.css'
-import './variable.css';
+import TestAdmin from "./pages/admin/Dashboarch";
+
+
 import Launch from "./pages/client/Launchpad/Launch";
 import Detail from "./pages/client/Launchpad/Detail";
 import DetailM from "./pages/client/Market/Detail";
@@ -36,7 +35,7 @@ function App() {
         </Route>
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<TestAdmin />} />
-          <Route path="test" element={<TestAdmin />} />
+          <Route path="dashboarch" element={<TestAdmin />} />
         </Route>
       </Routes>
     </div>
