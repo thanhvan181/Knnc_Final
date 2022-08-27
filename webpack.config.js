@@ -112,4 +112,5 @@ module.exports = {
     liveReload: true,
     historyApiFallback: true,
   },
+ 
 };
