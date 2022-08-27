@@ -19,11 +19,6 @@ function App() {
       <Routes>
         <Route path="/" element={<ClientLayout />}>
           <Route index element={<HomePage />} />
-          {/* <Route path="/home" element={<Home />} /> */}
-          <Route path="launch">
-            <Route index element={<Detail />} />
-            <Route path="detail" element={<Detail />} />
-          </Route>
           <Route path="market">
             <Route index element={<Market />} />
             <Route path="detail" element={<DetailM />} />
