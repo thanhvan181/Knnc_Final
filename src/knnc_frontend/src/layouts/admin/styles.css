@@ -22,3 +22,6 @@
 .cra-main-layout{
     min-height: 100vh;
 }
+.ant-menu.ant-menu-dark .ant-menu-item-selected.customclass {
+  background-color: '#00acc1';
+} 
