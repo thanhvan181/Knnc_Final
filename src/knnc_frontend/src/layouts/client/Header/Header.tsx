@@ -1,5 +1,5 @@
 
-import { Col, Row, Button, Space, PageHeader } from 'antd';
+import { Col, Row, Button, Space, PageHeader, Menu, Dropdown } from 'antd';
 import { blue } from '@ant-design/colors';
 import 'antd/dist/antd.css';
 import React, { useState } from 'react';
@@ -73,16 +73,35 @@ const Header = (props: Props) => {
       }
     }
   }
+  // Drop down data render
+  const menu = (
+    <Menu
+      items={[
+        {
+          label: 'asdasjdnkasjnjsan',
+          key: '0',
+        },
+        {
+          label: 'Chuyen ICP',
+          key: '1',
+        },
+        {
+          label: 'Kho luu tru FT',
+          key: '2',
+        },
+      ]}
+    />
+  );
   const [size, setSize] = useState(12);
   return <>
     <header className='header' >
       <Row gutter={[4, 16]}>
-        <Col span={8} className="grid-1">
+        <Col span={6} className="grid-1">
           <div className='bl-logo'>
             <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1661443624/logo_chim-01-03_obecwg.png" alt="" className="logo"  width="150px"  height="150px"/>
           </div>
         </Col>
-        <Col span={8} className="grid-2">
+        <Col span={12} className="grid-2">
           <nav className="menu">
             <ul>
               <li><Link to={'/'}>Trang chủ</Link></li>
@@ -91,15 +110,16 @@ const Header = (props: Props) => {
             </ul>
           </nav>
         </Col>
-        <Col span={8} className="grid-3">
+        <Col span={6} className="grid-3">
           <div className="btn-login">
           {connected ?
-              <Button className="balance" onClick={loginWithPlug}>
-                <Space size={size} className='nameLogin'>
-                  {balance} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
-                </Space>
-              </Button> : ""}
-
+               <Dropdown overlay={menu} trigger={['click']}>
+               <Button className="balance">
+                 <Space size={size} className='nameLogin'>
+                   {balance} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
+                 </Space>
+               </Button>
+         </Dropdown>: ""}
             <Button className="login" onClick={loginWithPlug}>
               <Space size={size} className='nameLogin'>
                 {connected ? "Profile" : "Authenticate"} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
