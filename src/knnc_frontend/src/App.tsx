@@ -4,15 +4,10 @@ import { Routes, Route, NavLink, Navigate, Link } from "react-router-dom";
 import ClientLayout from "./layouts/client/ClientLayout";
 import AdminLayout from "./layouts/admin/AdminLayout";
 import Home from "./pages/client/Home/Home";
-import Dashboarch from "./pages/admin/Dashboarch";
+import Dashboard from "./pages/admin/Dashboard";
 import Detail from "./pages/client/Launchpad/Detail";
 import DetailM from "./pages/client/Market/Detail";
 import HomePage from "./pages/client/Home/Home";
-
-
-
-
-
 
 
 function App() {
@@ -32,8 +27,8 @@ function App() {
           </Route>
         </Route>
         <Route path="admin" element={<AdminLayout />}>
-          <Route index element={<Dashboarch />} />
-          <Route path="dashboarch" element={<Dashboarch />} />
+          <Route index element={<Dashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
     </div>

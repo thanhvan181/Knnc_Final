@@ -3,11 +3,12 @@ import { Col, Row, Button, Space, PageHeader, Menu, Dropdown, Layout } from 'ant
 import { blue } from '@ant-design/colors';
 import 'antd/dist/antd.css';
 import React, { useState } from 'react';
-import "./Header.css"
+import "./styles.ts"
 import { Link } from "react-router-dom";
 import { knnc_backend } from "../../../../../declarations/knnc_backend"
 import { Principal } from '@dfinity/principal';
 import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import * as S from "./styles"
 
 type Props = {};
 
@@ -99,26 +100,28 @@ const HeaderLayout = (props: Props) => {
             Chợ tình thương
           </Menu.Item>
 
-          {connected ? <Menu.SubMenu key="SubMenu" title="Navigation Two - Submenu"  >
-            <Menu.Item key="two" >
-              Navigation Two
-            </Menu.Item>
-            <Menu.Item key="three" >
-              Navigation Three
-            </Menu.Item>
-            <Menu.ItemGroup title="Item Group">
-              <Menu.Item key="four" >
-                Navigation Four
+          <S.WrapperAuthen>
+            {connected ? <Menu.SubMenu key="SubMenu" title="Navigation Two - Submenu"  >
+              <Menu.Item key="two" >
+                Navigation Two
               </Menu.Item>
-              <Menu.Item key="five" >
-                Navigation Five
+              <Menu.Item key="three" >
+                Navigation Three
               </Menu.Item>
-            </Menu.ItemGroup>
-          </Menu.SubMenu> : ""}
+              <Menu.ItemGroup title="Item Group">
+                <Menu.Item key="four" >
+                  Navigation Four
+                </Menu.Item>
+                <Menu.Item key="five" >
+                  Navigation Five
+                </Menu.Item>
+              </Menu.ItemGroup>
+            </Menu.SubMenu> : ""}
 
-          <Menu.Item key="3"  >
-            <Button onClick={loginWithPlug}>Authenticate</Button>
-          </Menu.Item>
+            <Menu.Item key="3"  >
+              <Button onClick={loginWithPlug}>Authenticate</Button>
+            </Menu.Item>
+          </S.WrapperAuthen>
 
         </Menu>
       </Header>
