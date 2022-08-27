@@ -10,7 +10,6 @@ import Result "mo:base/Result";
 import Time "mo:base/Time";
 import TrieSet "mo:base/TrieSet";
 import Types "Types";
-import _users "mo:base/List";
 
 
 actor Main {
