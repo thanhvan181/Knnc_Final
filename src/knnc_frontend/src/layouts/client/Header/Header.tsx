@@ -122,7 +122,7 @@ const Header = (props: Props) => {
          </Dropdown>: ""}
             <Button className="login" onClick={loginWithPlug}>
               <Space size={size} className='nameLogin'>
-                {connected ? "Profile" : "Authenticate"} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
+                {connected ? "Connected" : typeof principal === 'undefined' ? "Login" : "" + principal  } <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
               </Space>
             </Button>
           </div>

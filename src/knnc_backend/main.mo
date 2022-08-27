@@ -595,6 +595,26 @@ actor Main {
     return #ok("Price changed");
   };
 
+  public query func getPostById (id : Nat) : async [Types.PostExt]{
+    var result : [Types.PostExt] = [];
+    for(val in posts.vals()){
+      if(val.postId == id){
+        let temp : Types.PostExt = {
+        postId = val.postId;
+        title = val.title;
+        who = val.who;
+        image = val.image;
+        content = val.content;
+        like = val.like;
+        whoLikeThis = val.whoLikeThis;
+        };
+        result := Array.append(result,[temp]);
+        return result;
+      };
+    };
+    result;
+  };
+
 
   public func transferToken(from : Principal,to : Principal, tokenId : Nat) : async Result.Result<Text, Text> {
     assert(_isUserExist(from));
