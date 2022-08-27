@@ -7,7 +7,7 @@ import "./styles.ts"
 import { Link } from "react-router-dom";
 import { knnc_backend } from "../../../../../declarations/knnc_backend"
 import { Principal } from '@dfinity/principal';
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, MailOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import * as S from "./styles"
 
 type Props = {};
@@ -80,8 +80,56 @@ const HeaderLayout = (props: Props) => {
       }
     }
   }
-  // Drop down data render
-
+  // Drop down left data render
+  const dropDownLeft = (
+    <Menu
+      items={[
+        {
+          label: <div>Dia chi vi</div>,
+          key: '0',
+        },
+        {
+          label: <a href="https://www.aliyun.com">2nd menu item</a>,
+          key: '1',
+        },
+        {
+          type: 'divider',
+        },
+        {
+          label: '3rd menu item',
+          key: '3',
+        },
+      ]}
+    />
+  );
+  // Drop down right data render
+  const dropDownRight = (
+    <Menu
+      items={[
+        {
+          label: <div>Dia chi vi</div>,
+          key: '0',
+        },
+        {
+          type: 'divider',
+        },
+        {
+          label: <Link to={'/product/add'}>Tao san pham</Link>,
+          key: '1',
+        },
+        {
+          type: 'divider',
+        },
+        {
+          label: <span>Hoan canh yeu thich</span>,
+          key: '3',
+        },
+        {
+          type: 'divider',
+        },
+      ]}
+    />
+  );
   return <>
 
     <Layout className="layout">
@@ -101,26 +149,26 @@ const HeaderLayout = (props: Props) => {
           </Menu.Item>
 
           <S.WrapperAuthen>
-            {connected ? <Menu.SubMenu key="SubMenu" title="Navigation Two - Submenu"  >
-              <Menu.Item key="two" >
-                Navigation Two
-              </Menu.Item>
-              <Menu.Item key="three" >
-                Navigation Three
-              </Menu.Item>
-              <Menu.ItemGroup title="Item Group">
-                <Menu.Item key="four" >
-                  Navigation Four
-                </Menu.Item>
-                <Menu.Item key="five" >
-                  Navigation Five
-                </Menu.Item>
-              </Menu.ItemGroup>
-            </Menu.SubMenu> : ""}
+            {connected ? (
+              <Dropdown overlay={dropDownLeft} trigger={['click']}>
+                <Button onClick={e => e.preventDefault()}>
+                  ICP: {balance}
+                </Button>
+              </Dropdown>) : ""}
 
-            <Menu.Item key="3"  >
-              <Button onClick={loginWithPlug}>Authenticate</Button>
-            </Menu.Item>
+            {connected ? (
+              <div style={{ marginLeft: 8 }}>
+                <Dropdown overlay={dropDownRight} trigger={['click']} placement="bottomRight">
+                  <Button onClick={e => e.preventDefault()} icon={<UserOutlined />}>
+                    Profile
+                  </Button>
+                </Dropdown>
+              </div>
+            ) :
+              <Menu.Item key="3"  >
+                <Button onClick={loginWithPlug}>Authenticate</Button>
+              </Menu.Item>}
+
           </S.WrapperAuthen>
 
         </Menu>

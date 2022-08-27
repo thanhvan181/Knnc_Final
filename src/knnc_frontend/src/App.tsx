@@ -8,6 +8,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import Detail from "./pages/client/Launchpad/Detail";
 import DetailM from "./pages/client/Market/Detail";
 import HomePage from "./pages/client/Home/Home";
+import ProductAdd from "./pages/client/ProductAdd/ProductAdd";
 
 
 function App() {
@@ -24,6 +25,10 @@ function App() {
           <Route path="market">
             <Route index element={<DetailM />} />
             <Route path="detail" element={<DetailM />} />
+          </Route>
+          <Route path="product">
+            <Route index element={<ProductAdd />} />
+            <Route path="add" element={<ProductAdd />} />
           </Route>
         </Route>
         <Route path="admin" element={<AdminLayout />}>
