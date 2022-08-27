@@ -12,7 +12,6 @@ import Root "./cap/Root";
 import Time "mo:base/Time";
 import TrieSet "mo:base/TrieSet";
 import Types "Types";
-import _FTRecord "mo:base/Array";
 
 
 

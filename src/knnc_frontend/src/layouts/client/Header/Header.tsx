@@ -2,7 +2,7 @@
 import { Col, Row, Button, Space, PageHeader, Menu, Dropdown, Layout } from 'antd';
 import { blue } from '@ant-design/colors';
 import 'antd/dist/antd.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./styles.ts"
 import { Link } from "react-router-dom";
 import { knnc_backend } from "../../../../../declarations/knnc_backend"
@@ -35,6 +35,9 @@ const HeaderLayout = (props: Props) => {
   const [principal, setPrincipal] = useState<Principal>()
   const [connected, setconnected] = useState(false)
   const [balance, setBalance] = useState(0)
+  const [beeBalance, setBeeBalance] = useState<BigInt>(BigInt(0))
+  
+  
   const loginWithPlug = async () => {
     let result = await window.ic.plug.requestConnect()
     let isConnected = await window.ic.plug.isConnected()
@@ -44,6 +47,8 @@ const HeaderLayout = (props: Props) => {
       let balance = await window.ic.plug.requestBalance()
       // lay so ICP trong vi
       console.log(balance[0].amount);
+      setBalance(balance[0].amount)
+      setBeeBalance(await knnc_backend.getFTTokenOfUser(Principal.from(window.ic.plug.sessionManager.sessionData.principalId)))
 
 
       let createUser = await knnc_backend.createUser(await Principal.from(window.ic.plug.sessionManager.sessionData.principalId))
@@ -131,43 +136,7 @@ const HeaderLayout = (props: Props) => {
     />
   );
   return <>
-<<<<<<< HEAD
-    <header className='header' >
-      <Row gutter={[4, 16]}>
-        <Col span={6} className="grid-1">
-          <div className='bl-logo'>
-            <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1661443624/logo_chim-01-03_obecwg.png" alt="" className="logo"  width="150px"  height="150px"/>
-          </div>
-        </Col>
-        <Col span={12} className="grid-2">
-          <nav className="menu">
-            <ul>
-              <li><Link to={'/'}>Trang chủ</Link></li>
-              <li><Link to={'/launch'}>Hòm Quỹ</Link></li>
-              <li><Link to={'/market'}>Chợ tình thương</Link></li>
-            </ul>
-          </nav>
-        </Col>
-        <Col span={6} className="grid-3">
-          <div className="btn-login">
-          {connected ?
-               <Dropdown overlay={menu} trigger={['click']}>
-               <Button className="balance">
-                 <Space size={size} className='nameLogin'>
-                   {balance} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
-                 </Space>
-               </Button>
-         </Dropdown>: ""}
-            <Button className="login" onClick={loginWithPlug}>
-              <Space size={size} className='nameLogin'>
-                {connected ? "Connected" : typeof principal === 'undefined' ? "Login" : "" + principal  } <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
-              </Space>
-            </Button>
-          </div>
-        </Col>
-      </Row>
-    </header>
-=======
+
 
     <Layout className="layout">
       <Header>
@@ -199,12 +168,21 @@ const HeaderLayout = (props: Props) => {
                   <Button onClick={e => e.preventDefault()} icon={<UserOutlined />}>
                     Profile
                   </Button>
+                  
                 </Dropdown>
+                <Dropdown overlay={dropDownRight} trigger={['click']} placement="bottomRight">
+                <Button>{beeBalance.toString()}</Button>
+                </Dropdown>
+               
               </div>
             ) :
               <Menu.Item key="3"  >
                 <Button onClick={loginWithPlug}>Authenticate</Button>
-              </Menu.Item>}
+              </Menu.Item>
+              
+              }
+
+              
 
           </S.WrapperAuthen>
 
@@ -212,7 +190,6 @@ const HeaderLayout = (props: Props) => {
       </Header>
     </Layout>
 
->>>>>>> master
   </>
 };
 

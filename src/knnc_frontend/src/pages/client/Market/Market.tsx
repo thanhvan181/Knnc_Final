@@ -1,12 +1,31 @@
 import { SearchOutlined } from "@ant-design/icons";
+import { Principal } from "@dfinity/principal";
 import { Col, Input, List, Row, Select } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { knnc_backend } from "../../../../../declarations/knnc_backend";
 import MarketItem from "../../../../components/Market/MarketItem";
 import * as S from "./styles";
 type Props = {};
 const { Option } = Select;
 const Market = (props: Props) => {
-  const data = [
+  const [data, setData] = useState([])
+  useEffect(() => {
+    (async () => {
+      let nfts = await knnc_backend.getAllTokens()
+      nfts.forEach(e => {
+        let temp = {
+          imageUrl: e.tokenMetadata.tokenUri,
+          user: Principal.from(e.owner).toString(),
+          name: e.tokenMetadata.tokenName,
+          price: e.price,
+          desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores nesciunt sunt rerum officia accusantium sapiente quidem nemo",
+        }
+        setData([...data, temp])
+      })
+    })()
+  }, [])
+
+  const fakeData = [
     {
       imageUrl: "https://picsum.photos/300/200",
       tag: "pendragon quest",

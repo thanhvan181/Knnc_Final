@@ -127,6 +127,7 @@ const ProductAdd = (props: Props) => {
                     'createAt': BigInt(Date.now())
                 },
                 "No collection",
+                //@ts-ignore
                 1
             );
 
