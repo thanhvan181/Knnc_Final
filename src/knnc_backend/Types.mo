@@ -8,6 +8,8 @@ module {
         var image : ?Text;
         var role : UserRole;
         var tokens : TrieSet.Set<Nat>;
+        var address: ?Text;
+        var phoneNumber : ?Text;
     };
 
     public type TokenInfoExt = {
@@ -24,6 +26,8 @@ module {
         name : ?Text;
         image : ?Text;
         tokens : [Nat];
+        address: ?Text;
+        phoneNumber : ?Text;
     };
 
     public type UserRole = {
