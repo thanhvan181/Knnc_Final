@@ -148,7 +148,7 @@ const HeaderLayout = (props: Props) => {
             <Link to={'/'}>Trang chủ</Link>
           </Menu.Item>
           <Menu.Item key="2"  >
-            <Link to={'/launch'}>Hòm Quỹ</Link>
+            <Link to={'/launchpad'}>Hòm Quỹ</Link>
           </Menu.Item>
           <Menu.Item key="3"  >
             <Link to={'/market'}>Chợ tình thương</Link>

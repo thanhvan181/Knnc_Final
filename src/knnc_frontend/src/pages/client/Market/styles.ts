@@ -34,3 +34,37 @@ export const CustomSearch = styled.div`
     width: 300px ;
   }
 `;
+
+export const Customspan = styled.span`
+  background-color: #42a5f5;
+  padding: 10px;
+  margin-right: 10px;
+  width: 100px;
+  border: 1px solid #42a5f5;
+  border-radius: 4px ;
+  margin-bottom: 10px;
+  cursor: pointer;
+  color: white;
+  
+`;
+export const WrapperDetails = styled.div`
+  margin: 30px 0px ;
+  
+`
+
+export const Btn = styled.div`
+text-align: center ;
+margin: 30px 0px 
+
+
+`
+export const CustomP = styled.p`
+
+  margin-top: 30px;
+  font-weight: bold;
+  border-radius: 4px;
+
+`;
+
+
+
