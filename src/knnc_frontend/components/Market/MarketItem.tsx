@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Tag, Typography, Image, Row, Col, Popover, Button, Divider } from 'antd';
 import { EyeOutlined, ShoppingCartOutlined, MenuOutlined } from '@ant-design/icons';
-const { Text, Title, Link } = Typography;
+const { Text, Title } = Typography;
 import * as S from './styles'
+import { Link } from 'react-router-dom';
 
 
 const PopOver: React.FC = () => {
@@ -45,7 +46,7 @@ const PopOver: React.FC = () => {
 
 const MarketItem = ({ item }) => {
   return (
-    <div>
+    <Link to={`/market/${item.id}`}>
       <S.ImageWrapper>
         <Image width={300} height={300} src={item.imageUrl}></Image>
       </S.ImageWrapper>
@@ -67,7 +68,7 @@ const MarketItem = ({ item }) => {
           </Col>
         </Row>
       </S.RowMargin>
-    </div>
+    </Link>
   )
 }
 

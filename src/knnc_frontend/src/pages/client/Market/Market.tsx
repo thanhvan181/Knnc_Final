@@ -25,40 +25,6 @@ const Market = (props: Props) => {
     })()
   }, [])
 
-  const fakeData = [
-    {
-      imageUrl: "https://picsum.photos/300/200",
-      tag: "pendragon quest",
-      likeAmount: 34,
-      title: "Chapter 1",
-      quote: "So again, once it ...",
-      desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores nesciunt sunt rerum officia accusantium sapiente quidem nemo",
-    },
-    {
-      imageUrl: "https://picsum.photos/300/200",
-      tag: "pendragon quest",
-      likeAmount: 34,
-      title: "Chapter 1",
-      quote: "So again, once it ...",
-      desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores nesciunt sunt rerum officia accusantium sapiente quidem nemo",
-    },
-    {
-      imageUrl: "https://picsum.photos/300/200",
-      tag: "pendragon quest",
-      likeAmount: 34,
-      title: "Chapter 1",
-      quote: "So again, once it ...",
-      desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores nesciunt sunt rerum officia accusantium sapiente quidem nemo",
-    },
-    {
-      imageUrl: "https://picsum.photos/300/200",
-      tag: "pendragon quest",
-      likeAmount: 34,
-      title: "Chapter 1",
-      quote: "So again, once it ...",
-      desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores nesciunt sunt rerum officia accusantium sapiente quidem nemo",
-    },
-  ];
   const onChange = (value: string) => {
     console.log(`selected ${value}`);
   };

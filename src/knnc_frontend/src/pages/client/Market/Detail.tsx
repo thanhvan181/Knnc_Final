@@ -6,12 +6,19 @@ import { Variant, VariantClass } from "@dfinity/candid/lib/cjs/idl";
 import { Principal } from "@dfinity/principal";
 import { IDL, VariantForm } from "@dfinity/candid";
 import * as S from "./styles"
+import { useParams } from "react-router-dom";
 
 type Props = {};
 
-const DetailM = (props: Props) => {
+const DetailMarket = (props: Props) => {
+  const params = useParams()
+  const id = BigInt(params.id);
   useEffect(() => {
-    (async () => {})();
+    (async () => {
+      let nftDetail = await knnc_backend.getTokenInfoById(id);
+      console.log('nft', nftDetail);
+      
+    })();
   }, []);
 
   return (
@@ -50,4 +57,4 @@ const DetailM = (props: Props) => {
   );
 };
 
-export default DetailM;
+export default DetailMarket;
