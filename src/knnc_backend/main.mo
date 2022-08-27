@@ -468,6 +468,30 @@ actor Main {
     };
   };
 
+  public query func getTotalFund() : async Nat {
+    _totalFunds
+  };
+
+  public query func getTotalVerifiedUser() : async Nat {
+    var result = 0;
+    for (element in _users.vals()) {
+      switch(element.role) {
+        case (verifiedUser) {
+          result+=1;
+        };
+      };
+    };
+    return result;
+  };
+
+  public query func getTotalNFT() : async Nat {
+    _totalTokens;
+  };
+
+  public query func getTotalPost() : async Nat {
+    numberPost;
+  };
+
 
 
 
