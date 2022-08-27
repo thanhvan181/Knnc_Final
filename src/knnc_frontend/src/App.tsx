@@ -11,6 +11,7 @@ import HomePage from "./pages/client/Home/Home";
 import ProductAdd from "./pages/client/ProductAdd/ProductAdd";
 import Market from "./pages/client/Market/Market";
 import Launch from "./pages/client/Launchpad/Launch";
+import DetailMarket from "./pages/client/Market/Detail";
 
 
 function App() {
@@ -21,11 +22,11 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="market">
             <Route index element={<Market />} />
-            <Route path="detail" element={<DetailM />} />
+            <Route path=":id" element={<DetailMarket />} />
           </Route>
           <Route path="launchpad">
             <Route index element={<Launch />} />
-            <Route path="detail" element={<DetailM />} />
+            <Route path=":id" element={<DetailM />} />
           </Route>
           <Route path="product">
             <Route index element={<ProductAdd />} />
