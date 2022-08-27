@@ -139,13 +139,13 @@ const HeaderLayout = (props: Props) => {
 
         <Menu mode="horizontal" defaultSelectedKeys={['mail']} theme="dark" >
           <Menu.Item key="1"  >
-            Trang chủ
+            <Link to={'/'}>Trang chủ</Link>
           </Menu.Item>
           <Menu.Item key="2"  >
-            Hòm Quỹ
+            <Link to={'/launch'}>Hòm Quỹ</Link>
           </Menu.Item>
           <Menu.Item key="3"  >
-            Chợ tình thương
+            <Link to={'/market'}>Chợ tình thương</Link>
           </Menu.Item>
 
           <S.WrapperAuthen>

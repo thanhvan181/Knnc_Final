@@ -80,19 +80,22 @@ const StyledGlobal = createGlobalStyle`
   .ant-message {
     z-index: 99999;
   }
+  .ant-popover-inner-content{
+    padding: 0
+  }
 `;
 
 type Props = {
-    children: React.ReactNode;
+  children: React.ReactNode;
 };
 
 const GlobalStyled = ({ children }: Props) => {
-    return (
-        <>
-            {children}
-            <StyledGlobal />
-        </>
-    );
+  return (
+    <>
+      {children}
+      <StyledGlobal />
+    </>
+  );
 };
 
 export default GlobalStyled;
