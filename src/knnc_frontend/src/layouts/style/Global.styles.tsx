@@ -16,7 +16,7 @@ const StyledGlobal = createGlobalStyle`
     --green-1: #96FDB5;
     --green-2: #85FFB1;
     --green-3: #6EE7B7;
-    --primary: #4D91FF;
+    --primary: #42a5f4;
     --red-1: #FF6666;
     --red-2: #D70018;
     --info-1: #6BCEFF;
@@ -53,10 +53,12 @@ const StyledGlobal = createGlobalStyle`
     text-rendering: optimizeLegibility;
     color: var(--color);
     line-height: 1.15;
+   
   }
   body {
     margin: 0;
     padding: 0;
+    
   }
   img {
      color: red;

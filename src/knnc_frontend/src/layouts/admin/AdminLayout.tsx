@@ -9,6 +9,7 @@ import { Layout, Menu } from 'antd';
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import "./styles.css"
+
 const { Header, Sider, Content } = Layout;
 
 const AdminLayout: React.FC = () => {
@@ -16,7 +17,7 @@ const AdminLayout: React.FC = () => {
 
   return (
     <Layout className='cra-main-layout'>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+      <Sider color='#42a5f5'  trigger={null} collapsible collapsed={collapsed}>
         <div className="logo" />
         <Menu
           theme="dark"
@@ -26,19 +27,31 @@ const AdminLayout: React.FC = () => {
             {
               key: '1',
               icon: <UserOutlined />,
-              label: 'nav 1',
+              label: 'Dashboarch',
               className: 'customclass'
             },
             {
               key: '2',
               icon: <VideoCameraOutlined />,
-              label: 'nav 2',
+              label: 'User',
               className: 'customclass'
             },
             {
               key: '3',
               icon: <UploadOutlined />,
-              label: 'nav 3',
+              label: 'Products',
+              className: 'customclass'
+            },
+            {
+              key: '4',
+              icon: <UploadOutlined />,
+              label: 'Posts',
+              className: 'customclass'
+            },
+            {
+              key: '5',
+              icon: <UploadOutlined />,
+              label: 'Funs',
               className: 'customclass'
             },
           ]}

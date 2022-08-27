@@ -19,7 +19,7 @@
 .site-layout .site-layout-background {
   background: #fff;
 }
-.cra-main-layout{
+.ant-layout.ant-layout-has-sider.cra-main-layout {
     min-height: 100vh;
 }
 .ant-menu.ant-menu-dark .ant-menu-item-selected.customclass {
