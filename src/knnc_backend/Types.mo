@@ -131,7 +131,9 @@ module {
         content : Text;
         like : Nat;
         whoLikeThis : [Principal];
-    }
+    };
+
+    
     
     
 }
