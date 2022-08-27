@@ -5,6 +5,8 @@ import React, { useEffect, useMemo } from "react";
 import { knnc_backend } from "../../../../../declarations/knnc_backend";
 import FeaturedItem from "../../../../components/Featured/FeaturedItem";
 import NewsItem from "../../../../components/News/NewsItem";
+import NewsList from "../../../../components/News/NewsList";
+import TopSponsor from "../../../../components/TopSponsor/TopSponsor";
 const { Title } = Typography;
 
 const contentStyle: React.CSSProperties = {
@@ -14,22 +16,28 @@ const contentStyle: React.CSSProperties = {
   textAlign: 'center',
   background: '#364d79',
 };
-
+//fake data - xiu goi api thi xoa di
+const data = [
+  {
+    imageUrl: 'https://picsum.photos/300/200',
+  },
+  {
+    imageUrl: 'https://picsum.photos/300/200',
+  },
+  {
+    imageUrl: 'https://picsum.photos/300/200',
+  },
+  {
+    imageUrl: 'https://picsum.photos/300/200',
+  }
+];
+//Component render FeatureList
 const FeatureList = () => {
-  const data = [
-    {
-      imageUrl: 'https://picsum.photos/300/200',
-    },
-    {
-      imageUrl: 'https://picsum.photos/300/200',
-    },
-    {
-      imageUrl: 'https://picsum.photos/300/200',
-    },
-    {
-      imageUrl: 'https://picsum.photos/300/200',
-    }
-  ];
+  useEffect(() => {
+    //call api o day
+
+  }, [])
+
   return (
     <>
       <Title level={3} style={{ fontSize: '40px', marginTop: 20 }}>Feature</Title>
@@ -37,11 +45,9 @@ const FeatureList = () => {
         grid={{ gutter: 16, column: 4 }}
         dataSource={data}
         renderItem={item => {
-
-          { console.log(item) }
           return (
             <List.Item>
-              <FeaturedItem isOnlyImage={false} item={item} />
+              <FeaturedItem isOnlyImage={true} item={item} />
             </List.Item>
           )
         }}
@@ -50,80 +56,35 @@ const FeatureList = () => {
 
   )
 }
-const NewsList = () => {
-  const data = [
-    {
-      imageUrl: 'https://picsum.photos/300/200',
-      tag: 'pendragon quest',
-      likeAmount: 34,
-      title: 'Chapter 1',
-      quote: 'So again, once it ...',
-      desc: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores nesciunt sunt rerum officia accusantium sapiente quidem nemo'
-    },
-    {
-      imageUrl: 'https://picsum.photos/300/200',
-      tag: 'pendragon quest',
-      likeAmount: 34,
-      title: 'Chapter 1',
-      quote: 'So again, once it ...',
-      desc: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores nesciunt sunt rerum officia accusantium sapiente quidem nemo'
-    },
-    {
-      imageUrl: 'https://picsum.photos/300/200',
-      tag: 'pendragon quest',
-      likeAmount: 34,
-      title: 'Chapter 1',
-      quote: 'So again, once it ...',
-      desc: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores nesciunt sunt rerum officia accusantium sapiente quidem nemo'
-    },
-    {
-      imageUrl: 'https://picsum.photos/300/200',
-      tag: 'pendragon quest',
-      likeAmount: 34,
-      title: 'Chapter 1',
-      quote: 'So again, once it ...',
-      desc: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores nesciunt sunt rerum officia accusantium sapiente quidem nemo'
-    },
-  ];
-  return (
-    <>
-      <Title level={3} style={{ fontSize: '40px', marginTop: 20 }}>Cac hoan canh kho khan</Title>
-      <List
-        grid={{ gutter: 16, column: 4 }}
-        dataSource={data}
-        renderItem={item => {
 
-          { console.log(item) }
-          return (
-            <List.Item>
-              <NewsItem item={item} alignText={'left'} />
-            </List.Item>
-          )
-        }}
-      />
-    </>
-  )
-}
 
 type Props = {};
 
-const Home = (props: Props) => {
-
-  // lay cac quy, cac bai post o day 
+const HomePage = (props: Props) => {
+  // call api o day
   useEffect(() => {
-   (async () => {
-   })()
+    (async () => {
+    })()
   }, [])
-
-
   return (
     <>
-      <div className="container">
-        <FeatureList />
-        <NewsList />
-      </div>
+      <FeatureList />
+      <TopSponsor />
+      <NewsList />
     </>
-  );
+  )
+
+
+
+
+  // return (
+  //   <>
+  //     <div className="container">
+  //       <FeatureList />
+  //       <NewsList />
+  //     </div>
+  //   </>
+  // );
 };
 
-export default Home;
+export default HomePage;

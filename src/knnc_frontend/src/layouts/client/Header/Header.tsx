@@ -1,12 +1,14 @@
 
-import { Col, Row, Button, Space, PageHeader, Menu, Dropdown } from 'antd';
+import { Col, Row, Button, Space, PageHeader, Menu, Dropdown, Layout } from 'antd';
 import { blue } from '@ant-design/colors';
 import 'antd/dist/antd.css';
 import React, { useState } from 'react';
-import "./Header.css"
+import "./styles.ts"
 import { Link } from "react-router-dom";
 import { knnc_backend } from "../../../../../declarations/knnc_backend"
 import { Principal } from '@dfinity/principal';
+import { AppstoreOutlined, MailOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import * as S from "./styles"
 
 type Props = {};
 
@@ -27,8 +29,9 @@ declare global {
     }
   }
 }
+const { Header, Content, Footer } = Layout;
 
-const Header = (props: Props) => {
+const HeaderLayout = (props: Props) => {
   const [principal, setPrincipal] = useState<Principal>()
   const [connected, setconnected] = useState(false)
   const [balance, setBalance] = useState(0)
@@ -44,7 +47,11 @@ const Header = (props: Props) => {
 
 
       let createUser = await knnc_backend.createUser(await Principal.from(window.ic.plug.sessionManager.sessionData.principalId))
-      console.log(createUser);
+      try {
+        console.log(createUser);
+      } catch (error) {
+        console.log("Admin");
+      };
       let userInfo = await knnc_backend.getUserInfoByPrincipal(Principal.from(await window.ic.plug.sessionManager.sessionData.principalId))
       console.log(userInfo);
 
@@ -73,27 +80,58 @@ const Header = (props: Props) => {
       }
     }
   }
-  // Drop down data render
-  const menu = (
+  // Drop down left data render
+  const dropDownLeft = (
     <Menu
       items={[
         {
-          label: 'asdasjdnkasjnjsan',
+          label: <div>Dia chi vi</div>,
           key: '0',
         },
         {
-          label: 'Chuyen ICP',
+          label: <a href="https://www.aliyun.com">2nd menu item</a>,
           key: '1',
         },
         {
-          label: 'Kho luu tru FT',
-          key: '2',
+          type: 'divider',
+        },
+        {
+          label: '3rd menu item',
+          key: '3',
         },
       ]}
     />
   );
-  const [size, setSize] = useState(12);
+  // Drop down right data render
+  const dropDownRight = (
+    <Menu
+      items={[
+        {
+          label: <div>Dia chi vi</div>,
+          key: '0',
+        },
+        {
+          type: 'divider',
+        },
+        {
+          label: <Link to={'/product/add'}>Tao san pham</Link>,
+          key: '1',
+        },
+        {
+          type: 'divider',
+        },
+        {
+          label: <span>Hoan canh yeu thich</span>,
+          key: '3',
+        },
+        {
+          type: 'divider',
+        },
+      ]}
+    />
+  );
   return <>
+<<<<<<< HEAD
     <header className='header' >
       <Row gutter={[4, 16]}>
         <Col span={6} className="grid-1">
@@ -129,8 +167,54 @@ const Header = (props: Props) => {
         </Col>
       </Row>
     </header>
+=======
+
+    <Layout className="layout">
+      <Header>
+        <div className="logo" />
+
+
+        <Menu mode="horizontal" defaultSelectedKeys={['mail']} theme="dark" >
+          <Menu.Item key="1"  >
+            <Link to={'/'}>Trang chủ</Link>
+          </Menu.Item>
+          <Menu.Item key="2"  >
+            <Link to={'/launch'}>Hòm Quỹ</Link>
+          </Menu.Item>
+          <Menu.Item key="3"  >
+            <Link to={'/market'}>Chợ tình thương</Link>
+          </Menu.Item>
+
+          <S.WrapperAuthen>
+            {connected ? (
+              <Dropdown overlay={dropDownLeft} trigger={['click']}>
+                <Button onClick={e => e.preventDefault()}>
+                  ICP: {balance}
+                </Button>
+              </Dropdown>) : ""}
+
+            {connected ? (
+              <div style={{ marginLeft: 8 }}>
+                <Dropdown overlay={dropDownRight} trigger={['click']} placement="bottomRight">
+                  <Button onClick={e => e.preventDefault()} icon={<UserOutlined />}>
+                    Profile
+                  </Button>
+                </Dropdown>
+              </div>
+            ) :
+              <Menu.Item key="3"  >
+                <Button onClick={loginWithPlug}>Authenticate</Button>
+              </Menu.Item>}
+
+          </S.WrapperAuthen>
+
+        </Menu>
+      </Header>
+    </Layout>
+
+>>>>>>> master
   </>
 };
 
-export default Header;
+export default HeaderLayout;
 

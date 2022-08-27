@@ -1,16 +1,24 @@
+import { Content } from "antd/lib/layout/layout";
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Footer from "./Footer/Footer";
-import Header from "./Header/Header";
+import Footers from "./Footer/Footer";
+
+import HeaderLayout from "./Header/Header";
+
 
 type Props = {};
 
 const ClientLayout = (props: Props) => {
   return (
     <>
-      <Header />
-      <Outlet />
-      <Footer />
+      <HeaderLayout />
+      <Content style={{ padding: '0 50px' }}>
+
+        <Outlet />
+
+      </Content>
+
+      <Footers />
     </>
   );
 };

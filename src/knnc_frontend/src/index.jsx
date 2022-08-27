@@ -13,7 +13,7 @@ ConfigProvider.config({
   prefixCls: "ant", // 4.13.0+
   iconPrefixCls: "anticon", // 4.17.0+
   theme: {
-    primaryColor: "#42a5f5",
+    primaryColor: "#0A263C"
   },
 });
 

@@ -5,7 +5,7 @@ interface Props {
   
 }
 
-const Dashboarch = (props: Props) => {
+const Dashboard = (props: Props) => {
   return (
     <>
       <Chars/>
@@ -14,4 +14,4 @@ const Dashboarch = (props: Props) => {
   )
 }
 
-export default Dashboarch
+export default Dashboard

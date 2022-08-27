@@ -4,29 +4,22 @@ import { Pie } from '@ant-design/charts';
 const PieChars: React.FC = () => {
     var data = [
         {
-            type: '分类一',
+            type: 'Fund',
             value: 27,
         },
         {
-            type: '分类二',
+            type: 'User',
             value: 25,
         },
         {
-            type: '分类三',
+            type: 'Total NFT',
             value: 18,
         },
         {
-            type: '分类四',
+            type: 'Total Post',
             value: 15,
         },
-        {
-            type: '分类五',
-            value: 10,
-        },
-        {
-            type: '其他',
-            value: 5,
-        },
+       
     ];
     var config = {
         appendPadding: 10,
@@ -53,7 +46,7 @@ const PieChars: React.FC = () => {
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                 },
-                content: 'AntV\nG2Plot',
+                content: '',
             },
         },
     };

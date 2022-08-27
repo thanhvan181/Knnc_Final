@@ -27,7 +27,7 @@ const AdminLayout: React.FC = () => {
             {
               key: '1',
               icon: <UserOutlined />,
-              label: 'Dashboarch',
+              label: 'Dashboard',
               className: 'customclass'
             },
             {
