@@ -37,11 +37,9 @@ const FeatureList = () => {
         grid={{ gutter: 16, column: 4 }}
         dataSource={data}
         renderItem={item => {
-
-          { console.log(item) }
           return (
             <List.Item>
-              <FeaturedItem isOnlyImage={false} item={item} />
+              <FeaturedItem isOnlyImage={true} item={item} />
             </List.Item>
           )
         }}
@@ -92,8 +90,6 @@ const NewsList = () => {
         grid={{ gutter: 16, column: 4 }}
         dataSource={data}
         renderItem={item => {
-
-          { console.log(item) }
           return (
             <List.Item>
               <NewsItem item={item} alignText={'left'} />
@@ -107,23 +103,29 @@ const NewsList = () => {
 
 type Props = {};
 
-const Home = (props: Props) => {
-
-  // lay cac quy, cac bai post o day 
+const HomePage = (props: Props) => {
+  // call api o day
   useEffect(() => {
-   (async () => {
-   })()
+    (async () => {
+    })()
   }, [])
-
-
   return (
     <>
-      <div className="container">
-        <FeatureList />
-        <NewsList />
-      </div>
+      <FeatureList />
     </>
-  );
+  )
+
+  
+
+
+  // return (
+  //   <>
+  //     <div className="container">
+  //       <FeatureList />
+  //       <NewsList />
+  //     </div>
+  //   </>
+  // );
 };
 
-export default Home;
+export default HomePage;

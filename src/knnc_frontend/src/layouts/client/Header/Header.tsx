@@ -1,5 +1,5 @@
 
-import { Col, Row, Button, Space, PageHeader, Menu, Dropdown } from 'antd';
+import { Col, Row, Button, Space, PageHeader, Menu, Dropdown, Layout } from 'antd';
 import { blue } from '@ant-design/colors';
 import 'antd/dist/antd.css';
 import React, { useState } from 'react';
@@ -7,6 +7,7 @@ import "./Header.css"
 import { Link } from "react-router-dom";
 import { knnc_backend } from "../../../../../declarations/knnc_backend"
 import { Principal } from '@dfinity/principal';
+import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
 
 type Props = {};
 
@@ -27,8 +28,9 @@ declare global {
     }
   }
 }
+const { Header, Content, Footer } = Layout;
 
-const Header = (props: Props) => {
+const HeaderLayout = (props: Props) => {
   const [principal, setPrincipal] = useState<Principal>()
   const [connected, setconnected] = useState(false)
   const [balance, setBalance] = useState(0)
@@ -78,63 +80,52 @@ const Header = (props: Props) => {
     }
   }
   // Drop down data render
-  const menu = (
-    <Menu
-      items={[
-        {
-          label: 'asdasjdnkasjnjsan',
-          key: '0',
-        },
-        {
-          label: 'Chuyen ICP',
-          key: '1',
-        },
-        {
-          label: 'Kho luu tru FT',
-          key: '2',
-        },
-      ]}
-    />
-  );
-  const [size, setSize] = useState(12);
+
   return <>
-    <header className='header' >
-      <Row gutter={[4, 16]}>
-        <Col span={6} className="grid-1">
-          <div className='bl-logo'>
-            <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1661443624/logo_chim-01-03_obecwg.png" alt="" className="logo"  width="150px"  height="150px"/>
-          </div>
-        </Col>
-        <Col span={12} className="grid-2">
-          <nav className="menu">
-            <ul>
-              <li><Link to={'/'}>Trang chủ</Link></li>
-              <li><Link to={'/launch'}>Hòm Quỹ</Link></li>
-              <li><Link to={'/market'}>Chợ tình thương</Link></li>
-            </ul>
-          </nav>
-        </Col>
-        <Col span={6} className="grid-3">
-          <div className="btn-login">
-          {connected ?
-               <Dropdown overlay={menu} trigger={['click']}>
-               <Button className="balance">
-                 <Space size={size} className='nameLogin'>
-                   {balance} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
-                 </Space>
-               </Button>
-         </Dropdown>: ""}
-            <Button className="login" onClick={loginWithPlug}>
-              <Space size={size} className='nameLogin'>
-                {connected ? "Connected" : "Authenticate"} <img src="https://res.cloudinary.com/dielvkumg/image/upload/v1660903783/IC_1_rxetca.png" alt="" />
-              </Space>
-            </Button>
-          </div>
-        </Col>
-      </Row>
-    </header>
+
+    <Layout className="layout">
+      <Header>
+        <div className="logo" />
+
+
+        <Menu mode="horizontal" defaultSelectedKeys={['mail']} theme="dark" >
+          <Menu.Item key="1"  >
+            Trang chủ
+          </Menu.Item>
+          <Menu.Item key="2"  >
+            Hòm Quỹ
+          </Menu.Item>
+          <Menu.Item key="3"  >
+            Chợ tình thương
+          </Menu.Item>
+
+          {connected ? <Menu.SubMenu key="SubMenu" title="Navigation Two - Submenu"  >
+            <Menu.Item key="two" >
+              Navigation Two
+            </Menu.Item>
+            <Menu.Item key="three" >
+              Navigation Three
+            </Menu.Item>
+            <Menu.ItemGroup title="Item Group">
+              <Menu.Item key="four" >
+                Navigation Four
+              </Menu.Item>
+              <Menu.Item key="five" >
+                Navigation Five
+              </Menu.Item>
+            </Menu.ItemGroup>
+          </Menu.SubMenu> : ""}
+
+          <Menu.Item key="3"  >
+            <Button onClick={loginWithPlug}>Authenticate</Button>
+          </Menu.Item>
+
+        </Menu>
+      </Header>
+    </Layout>
+
   </>
 };
 
-export default Header;
+export default HeaderLayout;
 
