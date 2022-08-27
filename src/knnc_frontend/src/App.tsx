@@ -16,13 +16,8 @@ import Market from "./pages/client/Market/Market";
 
 
 
-ConfigProvider.config({
-  prefixCls: 'ant', // 4.13.0+
-  iconPrefixCls: 'anticon', // 4.17.0+
-  theme: {
-    primaryColor: "#bfbfbf",
-  }
-});
+
+
 function App() {
   return (
     <div className="App">

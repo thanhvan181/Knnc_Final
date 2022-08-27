@@ -5,14 +5,26 @@ import { BrowserRouter } from "react-router-dom";
 import { knnc_backend } from "../../declarations/knnc_backend";
 import App from "./App";
 import 'antd/dist/antd.css';
-import './normalize.css'
-import './variable.css';
-import './global.css';
+// import './global.css';
+import { ConfigProvider } from "antd";
+import GlobalStyled from "./layouts/style/Global.styles";
+
+ConfigProvider.config({
+  prefixCls: "ant", // 4.13.0+
+  iconPrefixCls: "anticon", // 4.17.0+
+  theme: {
+    primaryColor: "#00acc1",
+  },
+});
 
 const AppRoot = () => {
   return (
     <BrowserRouter>
-      <App />
+      <GlobalStyled>
+        <ConfigProvider>
+          <App />
+        </ConfigProvider>
+      </GlobalStyled>
     </BrowserRouter>
   );
 };
