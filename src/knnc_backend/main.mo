@@ -75,6 +75,8 @@ actor Main {
       var image : ?Text = null;
       var role : Types.UserRole = #normal;
       var tokens = TrieSet.empty();
+      var address = null;
+      var phoneNumber = null;
     };
   };
 
@@ -106,6 +108,8 @@ actor Main {
           var image = profileImage;
           var role = user.role;
           var tokens = user.tokens;
+          var address = null;
+          var phoneNumber = null;
         };
         _users.put(principal, temp);
         return #err("User info changed"); 
@@ -176,6 +180,8 @@ actor Main {
           image = user.image;
           role = user.role;
           tokens = TrieSet.toArray(user.tokens);
+          address = user.address;
+          phoneNumber = user.phoneNumber;
         };
 
         return ?result;
@@ -231,6 +237,8 @@ actor Main {
         image = element.image;
         role = element.role;
         tokens = TrieSet.toArray(element.tokens);
+        address = element.address;
+        phoneNumber = element.phoneNumber;
       };
       result := Array.append(result, [temp]);
     };
