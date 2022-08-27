@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import { List, Typography } from 'antd';
 import FeaturedItem from '../../../../components/Featured/FeaturedItem';
+import { knnc_backend } from '../../../../../declarations/knnc_backend';
 const { Title } = Typography;
 
 type Props = {}
 
 const FeatureList = () => {
+  
   const data = [
     {
       imageUrl: 'https://picsum.photos/300/200',
@@ -42,7 +44,11 @@ const FeatureList = () => {
   ];
   useEffect(() => {
     //call api o day
-
+    (async () => {
+      let data = await knnc_backend.getAllFunds()
+      console.log(data);
+      
+    })()
   }, [])
 
   return (

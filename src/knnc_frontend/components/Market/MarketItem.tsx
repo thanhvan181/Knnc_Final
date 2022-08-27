@@ -61,7 +61,7 @@ const MarketItem = ({ item }) => {
       <S.RowMargin>
         <Row justify='space-between'>
           <Col>
-            <Title level={3}>{item.user}</Title>
+            <Title level={3}>{item.name}</Title>
           </Col>
           <Col>
             <PopOver />

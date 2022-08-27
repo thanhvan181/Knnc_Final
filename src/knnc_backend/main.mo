@@ -4,6 +4,7 @@ import Debug "mo:base/Debug";
 import Float "mo:base/Float";
 import Hash "mo:base/Hash";
 import HashMap "mo:base/HashMap";
+import Int "mo:base/Int";
 import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 import Principal "mo:base/Principal";
@@ -536,11 +537,35 @@ actor Main {
   public func singleMint(owner : Principal, tokenMetadata : Types.TokenMetadata, collection : Text, price : Float) : async Types.MintResult {
     assert(_isUserExist(owner));
     switch(_getUserRole(owner)) {
-      case (verifiedUser) {
+      case (?#verifiedUser) {
         await _addTokenTo(owner,  await _mint(owner, tokenMetadata, collection, price));
         return #ok;
       };
+      case(?#admin) {
+        await _addTokenTo(owner,  await _mint(owner, tokenMetadata, collection, price));
+        return #ok;
+      };
+      case(?#organization) {
+        await _addTokenTo(owner,  await _mint(owner, tokenMetadata, collection, price));
+        return #ok;
+      };
+      case(?#normal) {
+        return #error
+      };
+      case null {
+         return #error
+      };
     };
+  };
+
+  public query func getUsersHaveFTTokens() : async [Principal] {
+    var result : [Principal] = [];
+    for(element in _users.vals()) {
+      if(element.FTTokens > 0) {
+        result := Array.append(result, [element.principal]);
+      };
+    };
+    return result;
   };
 
   private func _mint(owner : Principal, tokenMetadata : Types.TokenMetadata, collection : Text, price : Float) : async Nat {
@@ -730,7 +755,17 @@ actor Main {
         case (#verifiedUser) {
           result+=1;
         };
+        case (#normal) {
+
+        };
+        case (#organization) {
+
+        };
+        case (#admin) {
+
+        };
       };
+      
     };
     return result;
   };
@@ -866,6 +901,32 @@ public query func getPostById (id : Nat) : async [Types.PostExt]{
 
     
     return #ok("OK")
+  };
+
+  public func buyNFT(from : Principal, to : Principal, tokenId : Nat) : async Text {
+    assert(_isUserExist(from));
+    assert(_isUserExist(to));
+    assert(_isTokenExist(tokenId));
+    
+    switch(_tokens.get(tokenId)) {
+      case null {
+        "error"
+      };
+      case (?token) {
+        if(_FTBalanceOf(from) < Float.toInt(token.price)) {
+         return "error";
+        };
+        await _removeTokenFrom(from, tokenId);
+        await _addTokenTo(to, tokenId);
+        await _changeTokenOwner(to, tokenId);
+        await _addFTTokenTo(to, Int.abs(Float.toInt(token.price)));
+        await _removeFTFrom(from, Int.abs(Float.toInt(token.price)));
+        await _chargeFee(from, to, _FTFee);
+        "ok"
+      };
+    };
+
+
   };
 
 

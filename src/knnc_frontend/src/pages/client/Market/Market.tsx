@@ -12,7 +12,7 @@ const Market = (props: Props) => {
   useEffect(() => {
     (async () => {
       let nfts = await knnc_backend.getAllTokens()
-      nfts.forEach(e => {
+      for (let e of nfts) {
         let temp = {
           imageUrl: e.tokenMetadata.tokenUri,
           user: Principal.from(e.owner).toString(),
@@ -20,8 +20,10 @@ const Market = (props: Props) => {
           price: e.price,
           id : e.index
         }
-        setData([...data, temp])
-      })
+        
+        setData(prevData=> [...prevData, temp])
+      }
+      
     })()
   }, [])
 
