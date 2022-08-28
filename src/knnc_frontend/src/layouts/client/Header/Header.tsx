@@ -127,6 +127,13 @@ const HeaderLayout = (props: Props) => {
           type: 'divider',
         },
         {
+          label: <Link to={'/user-info'}>Cap nhat thong tin </Link>,
+          key: '1',
+        },
+        {
+          type: 'divider',
+        },
+        {
           label: <span>Hoan canh yeu thich</span>,
           key: '3',
         },

@@ -12,6 +12,7 @@ import ProductAdd from "./pages/client/ProductAdd/ProductAdd";
 import Market from "./pages/client/Market/Market";
 import Launch from "./pages/client/Launchpad/Launch";
 import DetailMarket from "./pages/client/Market/Detail";
+import UpdateUser from "../components/UpdateUser/Update";
 
 
 function App() {
@@ -31,6 +32,9 @@ function App() {
           <Route path="product">
             <Route index element={<ProductAdd />} />
             <Route path="add" element={<ProductAdd />} />
+          </Route>
+          <Route path="user-info">
+            <Route index element={<UpdateUser />} />
           </Route>
         </Route>
         <Route path="admin" element={<AdminLayout />}>
