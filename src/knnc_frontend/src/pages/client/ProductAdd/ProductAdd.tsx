@@ -68,7 +68,7 @@ const ProductAdd = (props: Props) => {
         };
         onUploadForm();
 
-        setDataForm((prev) => ({ ...prev, file: dataInput }))
+        setDataForm((prev) => ({ ...prev, file: dataInput, price: price, name: name }))
 
         console.log(dataInput);
 
@@ -96,10 +96,10 @@ const ProductAdd = (props: Props) => {
                 console.log(url);
                 setImageLink(url)
 
-                if (window.ic.plug.sessionManager.sessionData.principalId === null) {
-                    console.log("Bạn chưa đăng nhập!");
-                    return;
-                }
+                // if (window.ic.plug.sessionManager.sessionData.principalId === null) {
+                //     console.log("Bạn chưa đăng nhập!");
+                //     return;
+                // }
 
                 // if (Number(dataForm.price) === 10000) {
                 //     console.log("Giá bằng 0!");
@@ -119,6 +119,8 @@ const ProductAdd = (props: Props) => {
     }
 
     const mint = async () => {
+        console.log(dataForm);
+        
             let mintResult = await knnc_backend.singleMint(
                 Principal.from(await window.ic.plug.sessionManager.sessionData.principalId),
                 {
@@ -128,8 +130,11 @@ const ProductAdd = (props: Props) => {
                 },
                 "No collection",
                 //@ts-ignore
-                1
+                Number(dataForm.price)
             );
+
+            console.log(mintResult);
+            
 
         
     }
@@ -163,7 +168,7 @@ const ProductAdd = (props: Props) => {
                     <Input type="text" id="name" placeholder="nhap name " required />
                 </Form.Item>
                 <button onClick={uploadToIPFS}>Upload to IPFS</button>
-                <Button htmlType="submit" onClick={mint} disabled={!mintable}>Mint</Button>
+                {mintable ?  <Button htmlType="submit" onClick={mint} >Mint</Button> : <Button htmlType="submit" onClick={mint} disabled >Mint</Button>}
                 {imageLink === "" ? <img style={{width:300, height:200}}></img> : <img style={{width:300, height:200}} src={imageLink} ></img>}
             </Form>
         </S.WrapperProductAdd>

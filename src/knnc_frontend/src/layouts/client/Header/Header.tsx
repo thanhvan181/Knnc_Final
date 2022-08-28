@@ -59,6 +59,7 @@ const HeaderLayout = (props: Props) => {
       };
       let userInfo = await knnc_backend.getUserInfoByPrincipal(Principal.from(await window.ic.plug.sessionManager.sessionData.principalId))
       console.log(userInfo);
+      
 
       // switch case o day
       switch (Object.getOwnPropertyNames(userInfo[0].role)[0].toString()) {
@@ -152,6 +153,9 @@ const HeaderLayout = (props: Props) => {
           </Menu.Item>
           <Menu.Item key="3"  >
             <Link to={'/market'}>Chợ tình thương</Link>
+          </Menu.Item>
+          <Menu.Item key="3"  >
+            <Link to={'/admin/dashboard'}>Chợ tình thương</Link>
           </Menu.Item>
 
           <S.WrapperAuthen>

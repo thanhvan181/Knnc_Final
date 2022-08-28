@@ -32,6 +32,8 @@ const TopRank = () => {
                         thumbnail : user[0].image,
                     }
                 }
+                console.log(temp);
+                
                 setUsers(prevData=> [...prevData, temp])
             }
             

@@ -1,9 +1,32 @@
-import { Table } from 'antd';
-import React from 'react'
+import { Principal } from '@dfinity/principal';
+import { Select, Table } from 'antd';
+import React, { useEffect, useState } from 'react'
+import { knnc_backend } from '../../../../../declarations/knnc_backend';
+const { Option } = Select
 
 type Props = {}
 
 const TableList = (props: Props) => {
+
+    const handleChange = async (value, record) => {
+        console.log("record", record)
+        console.log("value", value);
+        // switch(value) {
+        //     case 'organiza'
+        // }
+        
+        
+        let result = await knnc_backend.setUserRole(
+            //@ts-ignore
+            Principal.from(await window.ic.plug.principalId),
+            //@ts-ignore
+            Principal.from(record.principal),
+            //@ts-ignore
+            {[value] : null}
+        )
+        console.log(result);
+        
+    }
 
     const columns: any = [
         {
@@ -40,10 +63,20 @@ const TableList = (props: Props) => {
             sortDirections: ['descend'],
         },
         {
-            title: 'Age',
-            dataIndex: 'age',
+            title: 'role',
+            
             defaultSortOrder: 'descend',
-            sorter: (a, b) => a.age - b.age,
+            sorter: (a, b) => a.role - b.role,
+            render: (record) => {
+                console.log("recordxxxx", record)
+                return (
+                    <Select defaultValue={record.role} style={{ width: 120 }} onChange={(value)=> handleChange(value, record)}>
+                        <Option value="organization">To chuc</Option>
+                        <Option value="verifiedUser" >Hoàn cảnh khó khăn</Option>
+                        <Option  value="normal">Mạnh thường quân</Option>
+                    </Select>
+                )
+            }
         },
         {
             title: 'Address',
@@ -60,40 +93,40 @@ const TableList = (props: Props) => {
             ],
             onFilter: (value: string, record) => record.address.indexOf(value) === 0,
         },
+        {
+            title: 'principal',
+            dataIndex: 'principal',
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.principal - b.principal,
+        },
     ];
 
-    const data = [
-        {
-            key: '1',
-            name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park',
-        },
-        {
-            key: '2',
-            name: 'Jim Green',
-            age: 42,
-            address: 'London No. 1 Lake Park',
-        },
-        {
-            key: '3',
-            name: 'Joe Black',
-            age: 32,
-            address: 'Sidney No. 1 Lake Park',
-        },
-        {
-            key: '4',
-            name: 'Jim Red',
-            age: 32,
-            address: 'London No. 2 Lake Park',
-        },
-    ];
-  return (
-      <>
-          <Table columns={columns} dataSource={data} pagination={false} />
-      
-      </>
-  )
+
+
+
+    const [data, setData] = useState([]);
+    useEffect(() => {
+        (async () => {
+            let users = await knnc_backend.getAllUsers()
+            for (let element of users) {
+                let temp = {
+                    key: Principal.from(element.principal).toString(),
+                    principal: Principal.from(element.principal).toString(),
+                    name: element.name,
+                    role: Object.getOwnPropertyNames(element.role)[0],
+                    address: element.address
+                }
+                setData(prevData => [...prevData, temp])
+            };
+        })()
+    }, [])
+
+    return (
+        <>
+            <Table columns={columns} dataSource={data} pagination={false} />
+
+        </>
+    )
 }
 
 export default TableList
