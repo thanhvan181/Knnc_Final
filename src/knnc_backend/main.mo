@@ -889,7 +889,7 @@ public query func getPostById (id : Nat) : async [Types.PostExt]{
   };
 
 
-  public func transferToken(from : Principal,to : Principal, tokenId : Nat) : async Result.Result<Text, Text> {
+  private func _transferToken(from : Principal,to : Principal, tokenId : Nat) : async () {
     assert(_isUserExist(from));
     assert(_isUserExist(to));
     assert(_isTokenExist(tokenId));
@@ -899,8 +899,6 @@ public query func getPostById (id : Nat) : async [Types.PostExt]{
     await _removeTokenFrom(from, tokenId);
     await _changeTokenOwner(to, tokenId);
 
-    
-    return #ok("OK")
   };
 
   public func buyNFT(from : Principal, to : Principal, tokenId : Nat) : async Text {
@@ -916,9 +914,8 @@ public query func getPostById (id : Nat) : async [Types.PostExt]{
         if(_FTBalanceOf(from) < Float.toInt(token.price)) {
          return "error";
         };
-        await _removeTokenFrom(from, tokenId);
-        await _addTokenTo(to, tokenId);
-        await _changeTokenOwner(to, tokenId);
+
+        await _transferToken(to, from, tokenId);
         await _addFTTokenTo(to, Int.abs(Float.toInt(token.price)));
         await _removeFTFrom(from, Int.abs(Float.toInt(token.price)));
         await _chargeFee(from, to, _FTFee);

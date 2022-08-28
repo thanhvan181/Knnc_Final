@@ -36,7 +36,30 @@ const HeaderLayout = (props: Props) => {
   const [connected, setconnected] = useState(false)
   const [balance, setBalance] = useState(0)
   const [beeBalance, setBeeBalance] = useState<BigInt>(BigInt(0))
-  
+  const [ddUser, setDdUser] = useState([
+    {
+      label: <div>{principal && principal.toString()}</div>,
+      key: '0',
+    },
+    {
+      type: 'divider',
+    },
+    {
+      label: <Link to={'/product/add'}>Tao san pham</Link>,
+      key: '1',
+    },
+    {
+      type: 'divider',
+    },
+    {
+      label: <span>Hoan canh yeu thich</span>,
+      key: '3',
+    },
+    {
+      label: <Link to={'/my-nft'}>NFT cua toi</Link>,
+      key: '4',
+    }
+  ]);
   
   const loginWithPlug = async () => {
     let result = await window.ic.plug.requestConnect()
@@ -66,21 +89,34 @@ const HeaderLayout = (props: Props) => {
         case 'admin': {
           // admin thi lam j
           console.log("toi la admin");
+          setDdUser(prev=> [...prev, {
+            label: <Link to={'/admin'}>Admin</Link>,
+            key: '5',
+          },])
           break;
         };
         case 'normal': {
           // nguoi binh thuong
           console.log("toi la nguoi bth");
+          
           break;
         };
         case 'organization': {
           // to chuc
           console.log("toi la to chuc");
+          setDdUser(prev=> [...prev, {
+            label: <Link to={'/create-fund'}>Tao Quy</Link>,
+            key: '5',
+          },])
           break;
         };
         case 'verifiedUser': {
           // nguoi da duoc xac nhan
           console.log("toi la verifiedUser");
+          setDdUser(prev=> [...prev, {
+            label: <Link to={'/product/add'}>Dang ban</Link>,
+            key: '5',
+          },])
           break;
         }
       }
@@ -109,33 +145,9 @@ const HeaderLayout = (props: Props) => {
     />
   );
   // Drop down right data render
-  const dropDownRight = (
-    <Menu
-      items={[
-        {
-          label: <div>Dia chi vi</div>,
-          key: '0',
-        },
-        {
-          type: 'divider',
-        },
-        {
-          label: <Link to={'/product/add'}>Tao san pham</Link>,
-          key: '1',
-        },
-        {
-          type: 'divider',
-        },
-        {
-          label: <span>Hoan canh yeu thich</span>,
-          key: '3',
-        },
-        {
-          type: 'divider',
-        },
-      ]}
-    />
-  );
+  // const dropDownRight = (
+    
+  // );
   return <>
 
 
@@ -154,9 +166,6 @@ const HeaderLayout = (props: Props) => {
           <Menu.Item key="3"  >
             <Link to={'/market'}>Chợ tình thương</Link>
           </Menu.Item>
-          <Menu.Item key="3"  >
-            <Link to={'/admin/dashboard'}>Chợ tình thương</Link>
-          </Menu.Item>
 
           <S.WrapperAuthen>
             {connected ? (
@@ -168,15 +177,16 @@ const HeaderLayout = (props: Props) => {
 
             {connected ? (
               <div style={{ marginLeft: 8 }}>
-                <Dropdown overlay={dropDownRight} trigger={['click']} placement="bottomRight">
+                <Dropdown overlay={<Menu
+                //@ts-ignore
+                  items={ddUser}
+                />} trigger={['click']} placement="bottomRight">
                   <Button onClick={e => e.preventDefault()} icon={<UserOutlined />}>
                     Profile
                   </Button>
                   
                 </Dropdown>
-                <Dropdown overlay={dropDownRight} trigger={['click']} placement="bottomRight">
                 <Button>{beeBalance.toString()}</Button>
-                </Dropdown>
                
               </div>
             ) :
