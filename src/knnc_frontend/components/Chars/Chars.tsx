@@ -6,29 +6,29 @@ import TableList from './components/Table/Table'
 
 
 interface Props {
-    
+
 }
 
 const Chars = (props: Props) => {
     return (
         <>
             <Row gutter={12}>
-                <Col flex="400px">
-                    <PieCharts/>
+                <Col flex="300px">
+                    <PieCharts />
 
 
                 </Col>
                 <Col flex="auto">
 
-                    <Fund/>
+                    <Fund />
                 </Col>
-                
+
             </Row>
             <TableList />
 
-           
+
         </>
-       
+
     )
 }
 

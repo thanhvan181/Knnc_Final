@@ -12,7 +12,11 @@ import ProductAdd from "./pages/client/ProductAdd/ProductAdd";
 import Market from "./pages/client/Market/Market";
 import Launch from "./pages/client/Launchpad/Launch";
 import DetailMarket from "./pages/client/Market/Detail";
+<<<<<<< HEAD
 import MyNFT from "./pages/MyNFT/MyNFT";
+=======
+import UpdateUser from "../components/UpdateUser/Update";
+>>>>>>> 6a5606f954b50610b95741be8ef1438f4806e3ee
 
 
 function App() {
@@ -33,8 +37,13 @@ function App() {
             <Route index element={<ProductAdd />} />
             <Route path="add" element={<ProductAdd />} />
           </Route>
+<<<<<<< HEAD
           <Route path="my-nft">
             <Route index element={<MyNFT />} />
+=======
+          <Route path="user-info">
+            <Route index element={<UpdateUser />} />
+>>>>>>> 6a5606f954b50610b95741be8ef1438f4806e3ee
           </Route>
         </Route>
         <Route path="admin" element={<AdminLayout />}>

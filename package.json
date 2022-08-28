@@ -57,6 +57,7 @@
     "react-router-dom": "^6.3.0",
     "recharts": "^2.1.13",
     "style-loader": "^3.3.1",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "web3.storage": "^4.4.0"
   }
 }

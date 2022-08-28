@@ -145,9 +145,46 @@ const HeaderLayout = (props: Props) => {
     />
   );
   // Drop down right data render
+<<<<<<< HEAD
   // const dropDownRight = (
     
   // );
+=======
+  const dropDownRight = (
+    <Menu
+      items={[
+        {
+          label: <div>Dia chi vi</div>,
+          key: '0',
+        },
+        {
+          type: 'divider',
+        },
+        {
+          label: <Link to={'/product/add'}>Tao san pham</Link>,
+          key: '1',
+        },
+        {
+          type: 'divider',
+        },
+        {
+          label: <Link to={'/user-info'}>Cap nhat thong tin </Link>,
+          key: '1',
+        },
+        {
+          type: 'divider',
+        },
+        {
+          label: <span>Hoan canh yeu thich</span>,
+          key: '3',
+        },
+        {
+          type: 'divider',
+        },
+      ]}
+    />
+  );
+>>>>>>> 6a5606f954b50610b95741be8ef1438f4806e3ee
   return <>
 
 
